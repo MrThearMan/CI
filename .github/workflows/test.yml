@@ -3,18 +3,36 @@ name: Test
 on:
   workflow_call:
     inputs:
+
+      # Python versions used
       env:
         required: false
         type: string
         default: '["py37", "py38", "py39", "py310", "py311"]'
+
+      # Operating systems used
       os:
         required: false
         type: string
         default: '["ubuntu-latest", "macos-latest", "windows-latest"]'
+
+      # Poetry version to use
       poetry-version:
         required: false
         type: string
         default: "1.3.1"
+
+      # A single python version to exclude
+      env-exclude:
+        required: false
+        type: string
+        default: '4.0'
+
+      # A single operating system to exclude
+      os-exclude:
+        required: false
+        type: string
+        default: 'none'
 
 jobs:
 
@@ -30,6 +48,9 @@ jobs:
       matrix:
         os: ${{ fromJSON(inputs.os) }}
         env: ${{ fromJSON(inputs.env) }}
+        exclude:
+          - os: ${{ inputs.os-exclude }}
+            env: ${{ inputs.env-exclude }}
 
     steps:
       - name: "Check out repository"
