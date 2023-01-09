@@ -19,7 +19,7 @@ on:
 jobs:
 
   test:
-    name: ${{ matrix.os }} / ${{ matrix.env }}
+    name: ${{ matrix.os }}-${{ matrix.env }}
     runs-on: ${{ matrix.os }}
 
     env:
@@ -56,7 +56,7 @@ jobs:
         uses: actions/cache@v3
         with:
           path: .tox
-          key: cache-v1-python${{ steps.setup-python.outputs.python-version }}-${{ matrix.env }}-${{ hashFiles('**/poetry.lock') }}
+          key: cache-v1-python${{ steps.setup-python.outputs.python-version }}-${{ matrix.env }}-${{ matrix.os }}-${{ hashFiles('**/poetry.lock') }}
 
       - name: "Pre test hook"
         if: ${{ hashFiles('.github/actions/pre-test/action.yml') != '' }}
