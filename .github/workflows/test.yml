@@ -19,7 +19,7 @@ on:
 jobs:
 
   test:
-    name: ${{ matrix.os }} / python ${{ matrix.env }}
+    name: ${{ matrix.os }} / ${{ matrix.env }}
     runs-on: ${{ matrix.os }}
 
     env:
@@ -74,6 +74,8 @@ jobs:
 
       - name: "Submit coverage"
         run: poetry run coveralls --service=github
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
   submit-coverage:
     needs: test
@@ -100,3 +102,5 @@ jobs:
 
       - name: "Finnish coverage report"
         run: poetry run coveralls --service=github --finish
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
