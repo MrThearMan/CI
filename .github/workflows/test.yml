@@ -1,0 +1,106 @@
+name: Test
+
+on:
+  workflow_call:
+    inputs:
+      env:
+        required: true
+        type: string
+        default: '["py37", "py38", "py39", "py310", "py311"]'
+      os:
+        required: false
+        type: string
+        default: '["ubuntu-latest", "macos-latest", "windows-latest"]'
+      poetry-version:
+        required: false
+        type: string
+        default: "1.3.1"
+
+env:
+  POETRY_VERSION: ${{ input.poetry-version }}
+  POETRY_VIRTUALENVS_IN_PROJECT: true
+  POETRY_NO_INTERACTION: 1
+  POETRY_HOME: ~/.local
+  POETRY_CACHE_DIR: ~/.cache/pypoetry
+  COVERALLS_PARALLEL: true
+
+jobs:
+
+  test:
+    name: ${{ matrix.os }} / python ${{ matrix.env }}
+    runs-on: ${{ matrix.os }}
+
+    env:
+      COVERALLS_FLAG_NAME: ${{ matrix.env }}-${{ matrix.os }}
+
+    strategy:
+      matrix:
+        os: ${{ fromJSON(inputs.os) }}
+        env: ${{ fromJSON(inputs.env) }}
+
+    steps:
+      - name: "Check out repository"
+        uses: actions/checkout@v3
+
+      - name: "Install poetry"
+        run: pipx install poetry==${{ input.poetry-version }}
+
+      - name: "Set up python"
+        id: setup-python
+        uses: actions/setup-python@v4
+        with:
+          cache: "poetry"
+          env: |
+            ${{
+              (matrix.env == 'py37' || startsWith(matrix.env, 'py37-')) && '3.7' ||
+              (matrix.env == 'py38' || startsWith(matrix.env, 'py38-')) && '3.8' ||
+              (matrix.env == 'py39' || startsWith(matrix.env, 'py39-')) && '3.9' ||
+              (matrix.env == 'py310' || startsWith(matrix.env, 'py310-')) && '3.10' ||
+              '3.11'
+            }}
+
+      - name: "Load cached dependencies and pre-commit hooks"
+        uses: actions/cache@v3
+        with:
+          path: .tox
+          key: cache-v1-poetry${{ env.POETRY_VERSION }}-python${{ steps.setup-python.outputs.python-version }}-${{ matrix.env }}-${{ hashFiles('**/poetry.lock') }}
+
+      - name: "Pre test hook"
+        if: ${{ hashFiles('.github/actions/pre-test/action.yml') != '' }}
+        uses: ./.github/actions/pre-test
+
+      - name: "Install dependencies"
+        run: poetry install
+
+      - name: "Run tox"
+        run: poetry run tox -e ${{ matrix.env }}
+
+      - name: "Post test hook"
+        if: ${{ hashFiles('.github/actions/post-test/action.yml') != '' }}
+        uses: ./.github/actions/post-test
+
+      - name: "Submit coverage"
+        run: poetry run coveralls --service=github
+
+  submit-coverage:
+    needs: test
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: "Check out repository"
+        uses: actions/checkout@v3
+
+      - name: "Install poetry"
+        run: pipx install poetry==${{ input.poetry-version }}
+
+      - name: "Set up python"
+        uses: actions/setup-python@v4
+        with:
+          cache: "poetry"
+          env: "3.11"
+
+      - name: "Install dependencies"
+        run: poetry install
+
+      - name: "Finnish coverage report"
+        run: poetry run coveralls --service=github --finish
