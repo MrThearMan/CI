@@ -2,47 +2,39 @@ name: Test
 
 on:
   workflow_call:
-    inputs:
 
+    inputs:
       # Python versions used
       env:
         required: false
         type: string
         default: '["py37", "py38", "py39", "py310", "py311"]'
-
       # Operating systems used
       os:
         required: false
         type: string
         default: '["ubuntu-latest", "macos-latest", "windows-latest"]'
-
       # Poetry version to use
       poetry-version:
         required: false
         type: string
         default: "1.3.1"
-
       # A single python version to exclude
       env-exclude:
         required: false
         type: string
         default: '4.0'
-
       # A single operating system to exclude
       os-exclude:
         required: false
         type: string
         default: 'none'
 
-jobs:
 
+jobs:
   test:
     name: ${{ matrix.env }}-${{ matrix.os }}
     runs-on: ${{ matrix.os }}
-
-    env:
-      COVERALLS_PARALLEL: true
-      COVERALLS_FLAG_NAME: ${{ matrix.env }}-${{ matrix.os }}
 
     strategy:
       matrix:
@@ -96,14 +88,13 @@ jobs:
       - name: "Submit coverage"
         run: poetry run coveralls --service=github
         env:
+          COVERALLS_PARALLEL: true
+          COVERALLS_FLAG_NAME: ${{ matrix.env }}-${{ matrix.os }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
   submit-coverage:
     needs: test
     runs-on: ubuntu-latest
-
-    env:
-      COVERALLS_PARALLEL: true
 
     steps:
       - name: "Check out repository"
@@ -124,4 +115,5 @@ jobs:
       - name: "Finnish coverage report"
         run: poetry run coveralls --service=github --finish
         env:
+          COVERALLS_PARALLEL: true
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
