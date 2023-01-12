@@ -24,16 +24,11 @@ on:
         required: false
         type: string
         default: "3.11"
-      # A single python version to exclude
-      env-exclude:
+      # Exclude declared in flow style
+      exclude:
         required: false
         type: string
-        default: '4.0'
-      # A single operating system to exclude
-      os-exclude:
-        required: false
-        type: string
-        default: 'none'
+        default: '[{"os": "none", "env": "none"}]'
 
 
 jobs:
@@ -45,9 +40,7 @@ jobs:
       matrix:
         os: ${{ fromJSON(inputs.os) }}
         env: ${{ fromJSON(inputs.env) }}
-        exclude:
-          - os: ${{ inputs.os-exclude }}
-            env: ${{ inputs.env-exclude }}
+        exclude: ${{ fromJSON(inputs.exclude) }}
 
     steps:
       - name: "Check out repository"
