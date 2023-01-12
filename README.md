@@ -1,13 +1,16 @@
-# Reusable CI for poetry projects
+# Reusable CI pipelines for poetry projects
 
 > This is meant for personal use for my own projects.
 
 ## Requirements
 
-The CI templates require the projet to use [poetry] with [tox] and [coverage], 
-and use [coveralls] for hosting code coverage results, using the [coveralls-python] 
-library to send the coverage results. The optional docs building also requires
-that the project uses [mkdocs] for documentation.
+There are 3 different pipeline templates, one for testing,
+one for building docs, and one for releasing the library to [PyPI].
+
+All templates require the project to use [poetry].
+The testing pipeline requires [tox] and [coverage], as well as 
+[coveralls-python] for sending coverage results to [coveralls].
+The docs building pipeline requires [mkdocs].
 
 ## How to use
 
@@ -56,19 +59,16 @@ requires = ["poetry-core>=1.0.0"]
 build-backend = "poetry.core.masonry.api"
 ```
 
-There are 3 different CI templates, one for testing, one for building docs,
-and one for releasing the library to [PyPI].
-
 ---
 
-### Setup testing CI
+### Testing pipeline
 
-The testing CI uses a [job stategy matrix] to run tests in a number of
+This pipeline uses a [job stategy matrix] to run tests in a number of
 python environments and operating systems in parallel. All dependencies
 are cached for each os and environment resulting from the strategy
 to ensure the CI runs fast when dependencies are not updated.
 
-To set up the CI, add a `yml` file to `./.github/workflows/` 
+To set up the pipeline, add a `yml` file to `./.github/workflows/` 
 with the following job configuration.
 
 ```yaml
@@ -117,7 +117,7 @@ jobs:
 
 #### `poetry-version`
 
-Configure the poetry version used in the CI.
+Configure the poetry version used in the pipeline.
 
 Default configuration:
 
@@ -166,9 +166,9 @@ jobs:
 
 ---
 
-### Setup docs building CI
+### Docs building pipeline
 
-The docs CI can be used to build and push the docs used for 
+This pipeline can be used to build and push the docs used for 
 [mkdocs] from the `docs/` directory into [GitHub pages].
 
 > Note that [mkdocs] also requires a separate configuration 
@@ -181,7 +181,7 @@ The docs CI can be used to build and push the docs used for
 >   - Home: index.md  # ./docs/index.md
 > ```
 
-To set up the CI, add a `yml` file to `./.github/workflows/` 
+To set up the pipeline, add a `yml` file to `./.github/workflows/` 
 with the following job configuration.
 
 ```yaml
@@ -196,7 +196,7 @@ This job can take a number of inputs via the [with]-keyword.
 
 #### `poetry-version`
 
-Configure the poetry version used in the CI.
+Configure the poetry version used in the pipeline.
 
 Default configuration:
 
@@ -212,7 +212,7 @@ jobs:
 
 #### `python-version`
 
-Configure the python version used in the CI.
+Configure the python version used in the pipeline.
 
 Default configuration:
 
@@ -226,15 +226,15 @@ jobs:
 
 ---
 
-### Setup PyPI release CI
+### PyPI release pipeline
 
-The [PyPI] releasing CI can be used to build and release the library
-to [PyPI] with poetry using a [PyPI token] stored in the repository's [actions secrets].
+This pipeline can be used to build and release the library to [PyPI] with 
+poetry using a [PyPI token] stored in the repository's [actions secrets].
 
 > Note that the poetry [version] configuration needs to be updated or this
 > job will fail.
 
-To set up the CI, add a `yml` file to `./.github/workflows/`
+To set up the pipeline, add a `yml` file to `./.github/workflows/`
 with the following job configuration.
 
 ```yaml
@@ -259,7 +259,7 @@ This job can take a number of inputs via the [with]-keyword.
 
 #### `poetry-version`
 
-Configure the poetry version used in the CI.
+Configure the poetry version used in the pipeline.
 
 Default configuration:
 
@@ -275,7 +275,7 @@ jobs:
 
 #### `python-version`
 
-Configure the python version used in the CI.
+Configure the python version used in the pipeline.
 
 Default configuration:
 
@@ -289,9 +289,9 @@ jobs:
 
 ---
 
-## CI hooks
+## Pipeline hooks
 
-Some of the CI templates have hooks that can be defined
+Some of the pipeline templates have hooks that can be defined
 to run additional setup and postprocessing steps if necessary.
 To enable them, simply add a `yaml` file to the appropriate directory
 in your project and write a [composite action]. Here is a template for one.
@@ -315,12 +315,12 @@ runs:
 >     default: ${{ matrix.env }}
 > ```
 
-For the testing CI, the hooks are:
+For the testing pipeline, the hooks are:
 
 - `Pre-test`: Add the file `.github/actions/pre-test/action.yml`
 - `Post-test`: Add the file `.github/actions/post-test/action.yml`
 
-For the release CI, the hooks are:
+For the release pipeline, the hooks are:
 
 - `Pre-release`: Add the file `.github/actions/pre-release/action.yml`
 - `Post-release`: Add the file `.github/actions/post-release/action.yml`
