@@ -4,10 +4,10 @@
 
 ## Requirements
 
-The CI configuration requires the projet to use [poetry] with [tox] and [coverage], 
+The CI templates require the projet to use [poetry] with [tox] and [coverage], 
 and use [coveralls] for hosting code coverage results, using the [coveralls-python] 
 library to send the coverage results. The optional docs building also requires
-the project uses [mkdocs] for documentation.
+that the project uses [mkdocs] for documentation.
 
 ## How to use
 
@@ -203,7 +203,7 @@ Default configuration:
 ```yaml
 jobs:
   test:
-    uses: MrThearMan/CI/.github/workflows/test.yml@v0.2.0
+    uses: MrThearMan/CI/.github/workflows/docs.yml@v0.2.0
     with:
         poetry-version: "1.3.1"
 ```
@@ -219,14 +219,14 @@ Default configuration:
 ```yaml
 jobs:
   test:
-    uses: MrThearMan/CI/.github/workflows/test.yml@v0.2.0
+    uses: MrThearMan/CI/.github/workflows/docs.yml@v0.2.0
     with:
         python-version: "3.11"
 ```
 
 ---
 
-### Setup docs PyPI release CI
+### Setup PyPI release CI
 
 The [PyPI] releasing CI can be used to build and release the library
 to [PyPI] with poetry using a [PyPI token] stored in the repository's [actions secrets].
@@ -266,7 +266,7 @@ Default configuration:
 ```yaml
 jobs:
   test:
-    uses: MrThearMan/CI/.github/workflows/test.yml@v0.2.0
+    uses: MrThearMan/CI/.github/workflows/release.yml@v0.2.0
     with:
         poetry-version: "1.3.1"
 ```
@@ -282,7 +282,7 @@ Default configuration:
 ```yaml
 jobs:
   test:
-    uses: MrThearMan/CI/.github/workflows/test.yml@v0.2.0
+    uses: MrThearMan/CI/.github/workflows/release.yml@v0.2.0
     with:
         python-version: "3.11"
 ```
@@ -291,7 +291,7 @@ jobs:
 
 ## CI hooks
 
-Some of the CIs have hooks that can be defined
+Some of the CI templates have hooks that can be defined
 to run additional setup and postprocessing steps if necessary.
 To enable them, simply add a `yaml` file to the appropriate directory
 in your project and write a [composite action]. Here is a template for one.
