@@ -2,22 +2,17 @@ name: Release
 
 on:
   workflow_call:
-
     inputs:
-      # Python version to use
       python-version:
         required: false
         type: string
         default: "3.11"
-      # Poetry version to use
       poetry-version:
         required: false
         type: string
         default: "1.3.1"
-
     secrets:
-      # PyPI token
-      pypi_token:
+      pypi-token:
         required: true
 
 jobs:
@@ -37,10 +32,18 @@ jobs:
           cache: "poetry"
           python-version: ${{ inputs.python-version }}
 
+      - name: "Pre-release hook"
+        if: ${{ hashFiles('.github/actions/pre-release/action.yml') != '' }}
+        uses: ./.github/actions/pre-release
+
       - name: "Install dependencies"
         run: poetry install
 
       - name: "Publish on PyPi"
         run: poetry publish --build
         env:
-          POETRY_PYPI_TOKEN_PYPI: ${{ secrets.pypi_token }}
+          POETRY_PYPI_TOKEN_PYPI: ${{ secrets.pypi-token }}
+
+      - name: "Post-release hook"
+        if: ${{ hashFiles('.github/actions/post-release/action.yml') != '' }}
+        uses: ./.github/actions/post-release

@@ -2,14 +2,11 @@ name: Docs
 
 on:
   workflow_call:
-
     inputs:
-      # Python version to use
       python-version:
         required: false
         type: string
         default: "3.11"
-      # Poetry version to use
       poetry-version:
         required: false
         type: string
