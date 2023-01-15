@@ -19,6 +19,10 @@ on:
         required: false
         type: string
         default: "3.11"
+      submit-os:
+        required: false
+        type: string
+        default: "ubuntu-latest"
       exclude:
         required: false
         type: string
@@ -85,7 +89,7 @@ jobs:
 
   submit-coverage:
     needs: test
-    runs-on: ubuntu-latest
+    runs-on: ${{ inputs.submit-os }}
 
     steps:
       - name: "Check out repository"
