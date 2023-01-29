@@ -103,7 +103,7 @@ jobs:
   test:
     uses: MrThearMan/CI/.github/workflows/test.yml@v0.3.0
     with:
-        python-version: '["3.7", "3.8", "3.9", "3.10", "3.11"]'
+      python-version: '["3.7", "3.8", "3.9", "3.10", "3.11"]'
 ```
 
 ---
@@ -119,7 +119,7 @@ jobs:
   test:
     uses: MrThearMan/CI/.github/workflows/test.yml@v0.3.0
     with:
-        os: '["ubuntu-latest", "macos-latest", "windows-latest"]'
+      os: '["ubuntu-latest", "macos-latest", "windows-latest"]'
 ```
 
 ---
@@ -135,7 +135,7 @@ jobs:
   test:
     uses: MrThearMan/CI/.github/workflows/test.yml@v0.3.0
     with:
-        poetry-version: "1.3.1"
+      poetry-version: "1.3.1"
 ```
 
 ---
@@ -152,7 +152,7 @@ jobs:
   test:
     uses: MrThearMan/CI/.github/workflows/test.yml@v0.3.0
     with:
-        submit-python-version: "3.11"
+      submit-python-version: "3.11"
 ```
 
 ---
@@ -169,7 +169,7 @@ jobs:
   test:
     uses: MrThearMan/CI/.github/workflows/test.yml@v0.3.0
     with:
-        submit-os: "ubuntu-latest"
+      submit-os: "ubuntu-latest"
 ```
 
 ---
@@ -187,7 +187,7 @@ jobs:
   test:
     uses: MrThearMan/CI/.github/workflows/test.yml@v0.3.0
     with:
-        exclude: '[{"os": "none", "python-version": "none"}]'  # this ignores nothing
+      exclude: '[{"os": "none", "python-version": "none"}]'  # this ignores nothing
 ```
 
 ---
@@ -231,7 +231,7 @@ jobs:
   test:
     uses: MrThearMan/CI/.github/workflows/docs.yml@v0.3.0
     with:
-        poetry-version: "1.3.1"
+      poetry-version: "1.3.1"
 ```
 
 ---
@@ -247,7 +247,7 @@ jobs:
   test:
     uses: MrThearMan/CI/.github/workflows/docs.yml@v0.3.0
     with:
-        python-version: "3.11"
+      python-version: "3.11"
 ```
 
 ---
@@ -263,7 +263,7 @@ jobs:
   test:
     uses: MrThearMan/CI/.github/workflows/docs.yml@v0.3.0
     with:
-        os: "ubuntu-latest"
+      os: "ubuntu-latest"
 ```
 
 ---
@@ -304,7 +304,7 @@ jobs:
   test:
     uses: MrThearMan/CI/.github/workflows/release.yml@v0.3.0
     with:
-        poetry-version: "1.3.1"
+      poetry-version: "1.3.1"
 ```
 
 ---
@@ -320,7 +320,7 @@ jobs:
   test:
     uses: MrThearMan/CI/.github/workflows/release.yml@v0.3.0
     with:
-        python-version: "3.11"
+      python-version: "3.11"
 ```
 
 ---
@@ -336,7 +336,7 @@ jobs:
   test:
     uses: MrThearMan/CI/.github/workflows/release.yml@v0.3.0
     with:
-        os: "ubuntu-latest"
+      os: "ubuntu-latest"
 ```
 
 ---
