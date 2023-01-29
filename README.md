@@ -23,6 +23,7 @@ Here is a minimal `pyproject.toml` setup to get started:
 pytest = "..."  # use latest version
 coverage = "6.5.0"  # <7.x needed for coveralls-python
 tox = "..."  # use latest version
+tox-gh-actions = "..."  # use latest version
 coveralls = "..."  # use latest version
 
 # This is only needed for the docs CI
@@ -43,6 +44,14 @@ legacy_tox_ini = """
 [tox]
 envlist = py{37, 38, 39, 310, 311}
 isolated_build = true
+
+[gh-actions]
+python =
+    3.7: py37
+    3.8: py38
+    3.9: py39
+    3.10: py310
+    3.11: py311
 
 [testenv]
 allowlist_externals =
@@ -74,27 +83,27 @@ with the following job configuration.
 ```yaml
 jobs:
   test:
-    uses: MrThearMan/CI/.github/workflows/test.yml@v0.2.2
+    uses: MrThearMan/CI/.github/workflows/test.yml@v0.3.0
 ```
 
 This job can take a number of inputs via the [with]-keyword.
 
 ---
 
-#### `env`
+#### `python-version`
 
-Configure the tox [environments] the job is executed in.
-Note that, e.g., `py39` or anything prefixed with `py39-` will be
-run under the latest version of python 3.9, and so on.
+Configure the pyhton versions the test will be run with.
+The tox [environments] used are configured with the
+`[gh-actions]` setting in `pyproject.toml`.
 
 Default configuration:
 
 ```yaml
 jobs:
   test:
-    uses: MrThearMan/CI/.github/workflows/test.yml@v0.2.2
+    uses: MrThearMan/CI/.github/workflows/test.yml@v0.3.0
     with:
-        env: '["py37", "py38", "py39", "py310", "py311"]'
+        python-version: '["3.7", "3.8", "3.9", "3.10", "3.11"]'
 ```
 
 ---
@@ -108,7 +117,7 @@ Default configuration:
 ```yaml
 jobs:
   test:
-    uses: MrThearMan/CI/.github/workflows/test.yml@v0.2.2
+    uses: MrThearMan/CI/.github/workflows/test.yml@v0.3.0
     with:
         os: '["ubuntu-latest", "macos-latest", "windows-latest"]'
 ```
@@ -124,14 +133,14 @@ Default configuration:
 ```yaml
 jobs:
   test:
-    uses: MrThearMan/CI/.github/workflows/test.yml@v0.2.2
+    uses: MrThearMan/CI/.github/workflows/test.yml@v0.3.0
     with:
         poetry-version: "1.3.1"
 ```
 
 ---
 
-#### `python-version`
+#### `submit-python-version`
 
 Configure the python version used for the job that executes 
 the coveralls [parallel builds webhook].
@@ -141,9 +150,9 @@ Default configuration:
 ```yaml
 jobs:
   test:
-    uses: MrThearMan/CI/.github/workflows/test.yml@v0.2.2
+    uses: MrThearMan/CI/.github/workflows/test.yml@v0.3.0
     with:
-        python-version: "3.11"
+        submit-python-version: "3.11"
 ```
 
 ---
@@ -158,7 +167,7 @@ Default configuration:
 ```yaml
 jobs:
   test:
-    uses: MrThearMan/CI/.github/workflows/test.yml@v0.2.2
+    uses: MrThearMan/CI/.github/workflows/test.yml@v0.3.0
     with:
         submit-os: "ubuntu-latest"
 ```
@@ -176,9 +185,9 @@ Default configuration:
 ```yaml
 jobs:
   test:
-    uses: MrThearMan/CI/.github/workflows/test.yml@v0.2.2
+    uses: MrThearMan/CI/.github/workflows/test.yml@v0.3.0
     with:
-        exclude: '[{"os": "none", "env": "none"}]'  # this ignores nothing
+        exclude: '[{"os": "none", "python-version": "none"}]'  # this ignores nothing
 ```
 
 ---
@@ -204,7 +213,7 @@ with the following job configuration.
 ```yaml
 jobs:
   test:
-    uses: MrThearMan/CI/.github/workflows/docs.yml@v0.2.2
+    uses: MrThearMan/CI/.github/workflows/docs.yml@v0.3.0
 ```
 
 This job can take a number of inputs via the [with]-keyword.
@@ -220,7 +229,7 @@ Default configuration:
 ```yaml
 jobs:
   test:
-    uses: MrThearMan/CI/.github/workflows/docs.yml@v0.2.2
+    uses: MrThearMan/CI/.github/workflows/docs.yml@v0.3.0
     with:
         poetry-version: "1.3.1"
 ```
@@ -236,7 +245,7 @@ Default configuration:
 ```yaml
 jobs:
   test:
-    uses: MrThearMan/CI/.github/workflows/docs.yml@v0.2.2
+    uses: MrThearMan/CI/.github/workflows/docs.yml@v0.3.0
     with:
         python-version: "3.11"
 ```
@@ -252,7 +261,7 @@ Default configuration:
 ```yaml
 jobs:
   test:
-    uses: MrThearMan/CI/.github/workflows/docs.yml@v0.2.2
+    uses: MrThearMan/CI/.github/workflows/docs.yml@v0.3.0
     with:
         os: "ubuntu-latest"
 ```
@@ -273,7 +282,7 @@ with the following job configuration. The `pypi-token` input is required.
 ```yaml
 jobs:
   test:
-    uses: MrThearMan/CI/.github/workflows/release.yml@v0.2.2
+    uses: MrThearMan/CI/.github/workflows/release.yml@v0.3.0
     secrets:
       pypi-token: ${{ secrets.PYPI_API_TOKEN }}
 ```
@@ -293,7 +302,7 @@ Default configuration:
 ```yaml
 jobs:
   test:
-    uses: MrThearMan/CI/.github/workflows/release.yml@v0.2.2
+    uses: MrThearMan/CI/.github/workflows/release.yml@v0.3.0
     with:
         poetry-version: "1.3.1"
 ```
@@ -309,7 +318,7 @@ Default configuration:
 ```yaml
 jobs:
   test:
-    uses: MrThearMan/CI/.github/workflows/release.yml@v0.2.2
+    uses: MrThearMan/CI/.github/workflows/release.yml@v0.3.0
     with:
         python-version: "3.11"
 ```
@@ -325,7 +334,7 @@ Default configuration:
 ```yaml
 jobs:
   test:
-    uses: MrThearMan/CI/.github/workflows/release.yml@v0.2.2
+    uses: MrThearMan/CI/.github/workflows/release.yml@v0.3.0
     with:
         os: "ubuntu-latest"
 ```
@@ -354,8 +363,8 @@ runs:
 > 
 > ```yaml
 > inputs:
->   env:
->     default: ${{ matrix.env }}
+>   python-version:
+>     default: ${{ matrix.python-version }}
 > ```
 
 For the testing pipeline, the hooks are:
