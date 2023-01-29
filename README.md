@@ -268,25 +268,19 @@ poetry using a [PyPI token] stored in the repository's [actions secrets].
 > job will fail.
 
 To set up the pipeline, add a `yml` file to `./.github/workflows/`
-with the following job configuration.
+with the following job configuration. The `pypi-token` input is required.
 
 ```yaml
 jobs:
   test:
     uses: MrThearMan/CI/.github/workflows/release.yml@v0.2.2
-    with:
+    secrets:
       pypi-token: ${{ secrets.PYPI_API_TOKEN }}
 ```
 
 > Replace `PYPI_API_TOKEN` with the secret name of your choice
 
 This job can take a number of inputs via the [with]-keyword.
-
----
-
-#### `pypi-token`
-
-[PyPI token] used to upload the package to [PyPI]. This input is required.
 
 ---
 
