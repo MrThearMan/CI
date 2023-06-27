@@ -1,0 +1,31 @@
+name: "Changed file types"
+description: "Check if files with the given filetypes were changed in this Pull Request."
+
+inputs:
+  filetypes:
+    description: "File types to match, e.g., 'yaml|py'."
+    required: true
+
+outputs:
+  changed-filetypes:
+    description: "All file types changes in this PR."
+    value: ${{ steps.changed.outputs.changed-filetypes }}
+
+runs:
+  using: composite
+
+  steps:
+    - name: "Check if files with the given filetypes were changed in this Pull Request."
+      id: changed
+      shell: bash
+      run: >-
+        echo "changed-filetypes=$(
+        git diff --name-only ${{ github.event.pull_request.base.sha }} ${{ github.sha }}
+        | rev
+        | cut -d '.' -f 1
+        | sort
+        | uniq
+        | rev
+        | grep -wE ${{ filetypes }}
+        | xargs
+        )" >> $GITHUB_OUTPUT
