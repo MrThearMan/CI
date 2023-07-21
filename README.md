@@ -9,7 +9,7 @@ one for building docs, and one for releasing the library to [PyPI].
 
 All templates require the project to use [poetry].
 The testing pipeline requires [tox] and [coverage], as well as 
-[coveralls-python] for sending coverage results to [coveralls].
+Coverage results are sent to [coveralls].
 The docs building pipeline requires [mkdocs].
 
 ## How to use
@@ -21,10 +21,9 @@ Here is a minimal `pyproject.toml` setup to get started:
 
 [tool.poetry.group.test.dependencies]
 pytest = "..."  # use latest version
-coverage = "6.5.0"  # <7.x needed for coveralls-python
+coverage = "..."  # use latest version
 tox = "..."  # use latest version
 tox-gh-actions = "..."  # use latest version
-coveralls = "..."  # use latest version
 
 # This is only needed for the docs CI
 [tool.poetry.group.docs.dependencies]
@@ -81,7 +80,7 @@ with the following job configuration.
 ```yaml
 jobs:
   test:
-    uses: MrThearMan/CI/.github/workflows/test.yml@v0.3.3
+    uses: MrThearMan/CI/.github/workflows/test.yml@v0.3.4
 ```
 
 This job can take a number of inputs via the [with]-keyword.
@@ -99,7 +98,7 @@ Default configuration:
 ```yaml
 jobs:
   test:
-    uses: MrThearMan/CI/.github/workflows/test.yml@v0.3.3
+    uses: MrThearMan/CI/.github/workflows/test.yml@v0.3.4
     with:
       python-version: '["3.9", "3.10", "3.11"]'
 ```
@@ -115,7 +114,7 @@ Default configuration:
 ```yaml
 jobs:
   test:
-    uses: MrThearMan/CI/.github/workflows/test.yml@v0.3.3
+    uses: MrThearMan/CI/.github/workflows/test.yml@v0.3.4
     with:
       os: '["ubuntu-latest", "macos-latest", "windows-latest"]'
 ```
@@ -131,43 +130,9 @@ Default configuration:
 ```yaml
 jobs:
   test:
-    uses: MrThearMan/CI/.github/workflows/test.yml@v0.3.3
+    uses: MrThearMan/CI/.github/workflows/test.yml@v0.3.4
     with:
       poetry-version: "1.5.1"
-```
-
----
-
-#### `submit-python-version`
-
-Configure the python version used for the job that executes 
-the coveralls [parallel builds webhook].
-
-Default configuration:
-
-```yaml
-jobs:
-  test:
-    uses: MrThearMan/CI/.github/workflows/test.yml@v0.3.3
-    with:
-      submit-python-version: "3.11"
-```
-
----
-
-#### `submit-os`
-
-Configure the operating system used for the job that executes 
-the coveralls [parallel builds webhook].
-
-Default configuration:
-
-```yaml
-jobs:
-  test:
-    uses: MrThearMan/CI/.github/workflows/test.yml@v0.3.3
-    with:
-      submit-os: "ubuntu-latest"
 ```
 
 ---
@@ -183,7 +148,7 @@ Default configuration:
 ```yaml
 jobs:
   test:
-    uses: MrThearMan/CI/.github/workflows/test.yml@v0.3.3
+    uses: MrThearMan/CI/.github/workflows/test.yml@v0.3.4
     with:
       exclude: '[{"os": "none", "python-version": "none"}]'  # this ignores nothing
 ```
@@ -211,7 +176,7 @@ with the following job configuration.
 ```yaml
 jobs:
   test:
-    uses: MrThearMan/CI/.github/workflows/docs.yml@v0.3.3
+    uses: MrThearMan/CI/.github/workflows/docs.yml@v0.3.4
 ```
 
 This job can take a number of inputs via the [with]-keyword.
@@ -227,7 +192,7 @@ Default configuration:
 ```yaml
 jobs:
   test:
-    uses: MrThearMan/CI/.github/workflows/docs.yml@v0.3.3
+    uses: MrThearMan/CI/.github/workflows/docs.yml@v0.3.4
     with:
       poetry-version: "1.5.1"
 ```
@@ -243,7 +208,7 @@ Default configuration:
 ```yaml
 jobs:
   test:
-    uses: MrThearMan/CI/.github/workflows/docs.yml@v0.3.3
+    uses: MrThearMan/CI/.github/workflows/docs.yml@v0.3.4
     with:
       python-version: "3.11"
 ```
@@ -259,7 +224,7 @@ Default configuration:
 ```yaml
 jobs:
   test:
-    uses: MrThearMan/CI/.github/workflows/docs.yml@v0.3.3
+    uses: MrThearMan/CI/.github/workflows/docs.yml@v0.3.4
     with:
       os: "ubuntu-latest"
 ```
@@ -280,7 +245,7 @@ with the following job configuration. The `pypi-token` input is required.
 ```yaml
 jobs:
   test:
-    uses: MrThearMan/CI/.github/workflows/release.yml@v0.3.3
+    uses: MrThearMan/CI/.github/workflows/release.yml@v0.3.4
     secrets:
       pypi-token: ${{ secrets.PYPI_API_TOKEN }}
 ```
@@ -300,7 +265,7 @@ Default configuration:
 ```yaml
 jobs:
   test:
-    uses: MrThearMan/CI/.github/workflows/release.yml@v0.3.3
+    uses: MrThearMan/CI/.github/workflows/release.yml@v0.3.4
     with:
       poetry-version: "1.5.1"
 ```
@@ -316,7 +281,7 @@ Default configuration:
 ```yaml
 jobs:
   test:
-    uses: MrThearMan/CI/.github/workflows/release.yml@v0.3.3
+    uses: MrThearMan/CI/.github/workflows/release.yml@v0.3.4
     with:
       python-version: "3.11"
 ```
@@ -332,7 +297,7 @@ Default configuration:
 ```yaml
 jobs:
   test:
-    uses: MrThearMan/CI/.github/workflows/release.yml@v0.3.3
+    uses: MrThearMan/CI/.github/workflows/release.yml@v0.3.4
     with:
       os: "ubuntu-latest"
 ```

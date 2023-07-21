@@ -15,14 +15,6 @@ on:
         required: false
         type: string
         default: "1.5.1"
-      submit-python-version:
-        required: false
-        type: string
-        default: "3.11"
-      submit-os:
-        required: false
-        type: string
-        default: "ubuntu-latest"
       exclude:
         required: false
         type: string
@@ -69,39 +61,27 @@ jobs:
       - name: "Run tox"
         run: poetry run tox
 
+      - name: "Make coverage report"
+        run: |
+          poetry run coverage report
+          poetry run coverage xml
+
       - name: "Post-test hook"
         if: ${{ hashFiles('.github/actions/post-test/action.yml') != '' }}
         uses: ./.github/actions/post-test
 
       - name: "Submit coverage"
-        run: poetry run coveralls --service=github
-        env:
-          COVERALLS_PARALLEL: true
-          COVERALLS_FLAG_NAME: ${{ matrix.python-version }}-${{ matrix.os }}
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        uses: coverallsapp/github-action@v2
+        with:
+          file: coverage.xml
+          flag-name: ${{ steps.setup-python.outputs.python-version }}-${{ matrix.os }}
+          parallel: true
 
   submit-coverage:
     needs: test
-    runs-on: ${{ inputs.submit-os }}
-
+    runs-on: "ubuntu-latest"
     steps:
-      - name: "Check out repository"
-        uses: actions/checkout@v3
-
-      - name: "Install poetry"
-        run: pipx install "poetry==${{ inputs.poetry-version }}"
-
-      - name: "Set up python"
-        uses: actions/setup-python@v4
-        with:
-          cache: "poetry"
-          python-version: ${{ inputs.submit-python-version }}
-
-      - name: "Install dependencies"
-        run: poetry install
-
       - name: "Finnish coverage report"
-        run: poetry run coveralls --service=github --finish
-        env:
-          COVERALLS_PARALLEL: true
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        uses: coverallsapp/github-action@v2
+        with:
+          parallel-finished: true
