@@ -41,7 +41,7 @@ omit = [
 [tool.tox]
 legacy_tox_ini = """
 [tox]
-envlist = py{39, 310, 311}
+envlist = py{39, 310, 311, 312}
 isolated_build = true
 
 [gh-actions]
@@ -49,6 +49,7 @@ python =
     3.9: py39
     3.10: py310
     3.11: py311
+    3.12: py312
 
 [testenv]
 allowlist_externals =
@@ -61,7 +62,7 @@ commands =
 """
 
 [build-system]
-requires = ["poetry-core>=1.6.0"]
+requires = ["poetry-core>=1.7.0"]
 build-backend = "poetry.core.masonry.api"
 ```
 
@@ -80,7 +81,7 @@ with the following job configuration.
 ```yaml
 jobs:
   test:
-    uses: MrThearMan/CI/.github/workflows/test.yml@v0.3.4
+    uses: MrThearMan/CI/.github/workflows/test.yml@v0.3.5
 ```
 
 This job can take a number of inputs via the [with]-keyword.
@@ -98,7 +99,7 @@ Default configuration:
 ```yaml
 jobs:
   test:
-    uses: MrThearMan/CI/.github/workflows/test.yml@v0.3.4
+    uses: MrThearMan/CI/.github/workflows/test.yml@v0.3.5
     with:
       python-version: '["3.9", "3.10", "3.11"]'
 ```
@@ -114,7 +115,7 @@ Default configuration:
 ```yaml
 jobs:
   test:
-    uses: MrThearMan/CI/.github/workflows/test.yml@v0.3.4
+    uses: MrThearMan/CI/.github/workflows/test.yml@v0.3.5
     with:
       os: '["ubuntu-latest", "macos-latest", "windows-latest"]'
 ```
@@ -130,7 +131,7 @@ Default configuration:
 ```yaml
 jobs:
   test:
-    uses: MrThearMan/CI/.github/workflows/test.yml@v0.3.4
+    uses: MrThearMan/CI/.github/workflows/test.yml@v0.3.5
     with:
       poetry-version: "1.5.1"
 ```
@@ -148,7 +149,7 @@ Default configuration:
 ```yaml
 jobs:
   test:
-    uses: MrThearMan/CI/.github/workflows/test.yml@v0.3.4
+    uses: MrThearMan/CI/.github/workflows/test.yml@v0.3.5
     with:
       exclude: '[{"os": "none", "python-version": "none"}]'  # this ignores nothing
 ```
@@ -176,7 +177,7 @@ with the following job configuration.
 ```yaml
 jobs:
   test:
-    uses: MrThearMan/CI/.github/workflows/docs.yml@v0.3.4
+    uses: MrThearMan/CI/.github/workflows/docs.yml@v0.3.5
 ```
 
 This job can take a number of inputs via the [with]-keyword.
@@ -192,7 +193,7 @@ Default configuration:
 ```yaml
 jobs:
   test:
-    uses: MrThearMan/CI/.github/workflows/docs.yml@v0.3.4
+    uses: MrThearMan/CI/.github/workflows/docs.yml@v0.3.5
     with:
       poetry-version: "1.5.1"
 ```
@@ -208,7 +209,7 @@ Default configuration:
 ```yaml
 jobs:
   test:
-    uses: MrThearMan/CI/.github/workflows/docs.yml@v0.3.4
+    uses: MrThearMan/CI/.github/workflows/docs.yml@v0.3.5
     with:
       python-version: "3.11"
 ```
@@ -224,7 +225,7 @@ Default configuration:
 ```yaml
 jobs:
   test:
-    uses: MrThearMan/CI/.github/workflows/docs.yml@v0.3.4
+    uses: MrThearMan/CI/.github/workflows/docs.yml@v0.3.5
     with:
       os: "ubuntu-latest"
 ```
@@ -245,7 +246,7 @@ with the following job configuration. The `pypi-token` input is required.
 ```yaml
 jobs:
   test:
-    uses: MrThearMan/CI/.github/workflows/release.yml@v0.3.4
+    uses: MrThearMan/CI/.github/workflows/release.yml@v0.3.5
     secrets:
       pypi-token: ${{ secrets.PYPI_API_TOKEN }}
 ```
@@ -265,7 +266,7 @@ Default configuration:
 ```yaml
 jobs:
   test:
-    uses: MrThearMan/CI/.github/workflows/release.yml@v0.3.4
+    uses: MrThearMan/CI/.github/workflows/release.yml@v0.3.5
     with:
       poetry-version: "1.5.1"
 ```
@@ -281,7 +282,7 @@ Default configuration:
 ```yaml
 jobs:
   test:
-    uses: MrThearMan/CI/.github/workflows/release.yml@v0.3.4
+    uses: MrThearMan/CI/.github/workflows/release.yml@v0.3.5
     with:
       python-version: "3.11"
 ```
@@ -297,7 +298,7 @@ Default configuration:
 ```yaml
 jobs:
   test:
-    uses: MrThearMan/CI/.github/workflows/release.yml@v0.3.4
+    uses: MrThearMan/CI/.github/workflows/release.yml@v0.3.5
     with:
       os: "ubuntu-latest"
 ```
