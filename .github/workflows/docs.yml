@@ -37,7 +37,6 @@ jobs:
 
       - name: "Load cached poetry environment"
         uses: actions/cache@v3
-        id: cache
         with:
           path: .venv
           key: cache-v1-docs-python${{ steps.setup-python.outputs.python-version }}-${{ inputs.os }}

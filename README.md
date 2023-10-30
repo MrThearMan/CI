@@ -24,6 +24,9 @@ pytest = "..."  # use latest version
 coverage = "..."  # use latest version
 tox = "..."  # use latest version
 tox-gh-actions = "..."  # use latest version
+# 'distutils' is not included in virtual environments from Python 3.12 onwards,
+# so you might need to explcitly include it via setuptools.
+setuptools = {version = "...", python = ">=3.12"}  # use latest version
 
 # This is only needed for the docs CI
 [tool.poetry.group.docs.dependencies]
@@ -341,6 +344,55 @@ For the release pipeline, the hooks are:
 - `Pre-release`: Add the file `.github/actions/pre-release/action.yml`
 - `Post-release`: Add the file `.github/actions/post-release/action.yml`
 
+---
+
+## Extra actions
+
+### Poetry install action
+
+Installs poetry to the current python version, e.g., if used after 
+`actions/setup-python`, poetry is installed with that python version.
+
+```yaml
+jobs:
+  <foo>:
+    steps:
+      - ...
+      - uses: MrThearMan/CI/.github/actions/poetry@v0.4.0
+```
+
+However, `actions/setup-python` [poetry caching] cannot be used if poetry is not installed.
+In this case, a custom cache must be created:
+
+```
+jobs:
+  <foo>:
+    steps:
+      - ...
+      - name: "Load cached poetry environment"
+        uses: actions/cache@v3
+        with:
+          path: .venv
+          key: <unique-key-per-env>
+```
+
+### Git changed filetypes
+
+> Not tested yet.
+
+Can be used to check if certain filetypes were changed in a pull request.
+
+```yaml
+jobs:
+  <foo>:
+    steps:
+      - uses: MrThearMan/CI/.github/actions/get-changed-filetypes@v0.4.0
+        id: changed
+        with:
+          filetypes: "py|yaml"
+      - if: ${{ changed.changed-filetypes ... }}
+```
+
 
 [poetry]: https://python-poetry.org/
 [tox]: https://tox.wiki/en/latest/
@@ -359,3 +411,4 @@ For the release pipeline, the hooks are:
 [actions secrets]: https://docs.github.com/en/actions/security-guides/encrypted-secrets#creating-encrypted-secrets-for-a-repository
 [version]: https://python-poetry.org/docs/pyproject#version
 [composite action]: https://docs.github.com/en/actions/creating-actions/creating-a-composite-action
+[poetry caching]: https://github.com/actions/setup-python/blob/main/docs/advanced-usage.md#caching-packages
