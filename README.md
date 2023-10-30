@@ -81,7 +81,7 @@ with the following job configuration.
 ```yaml
 jobs:
   test:
-    uses: MrThearMan/CI/.github/workflows/test.yml@v0.3.5
+    uses: MrThearMan/CI/.github/workflows/test.yml@v0.4.0
 ```
 
 This job can take a number of inputs via the [with]-keyword.
@@ -99,7 +99,7 @@ Default configuration:
 ```yaml
 jobs:
   test:
-    uses: MrThearMan/CI/.github/workflows/test.yml@v0.3.5
+    uses: MrThearMan/CI/.github/workflows/test.yml@v0.4.0
     with:
       python-version: '["3.9", "3.10", "3.11"]'
 ```
@@ -115,7 +115,7 @@ Default configuration:
 ```yaml
 jobs:
   test:
-    uses: MrThearMan/CI/.github/workflows/test.yml@v0.3.5
+    uses: MrThearMan/CI/.github/workflows/test.yml@v0.4.0
     with:
       os: '["ubuntu-latest", "macos-latest", "windows-latest"]'
 ```
@@ -131,7 +131,7 @@ Default configuration:
 ```yaml
 jobs:
   test:
-    uses: MrThearMan/CI/.github/workflows/test.yml@v0.3.5
+    uses: MrThearMan/CI/.github/workflows/test.yml@v0.4.0
     with:
       poetry-version: "1.5.1"
 ```
@@ -149,7 +149,7 @@ Default configuration:
 ```yaml
 jobs:
   test:
-    uses: MrThearMan/CI/.github/workflows/test.yml@v0.3.5
+    uses: MrThearMan/CI/.github/workflows/test.yml@v0.4.0
     with:
       exclude: '[{"os": "none", "python-version": "none"}]'  # this ignores nothing
 ```
@@ -177,7 +177,7 @@ with the following job configuration.
 ```yaml
 jobs:
   test:
-    uses: MrThearMan/CI/.github/workflows/docs.yml@v0.3.5
+    uses: MrThearMan/CI/.github/workflows/docs.yml@v0.4.0
 ```
 
 This job can take a number of inputs via the [with]-keyword.
@@ -193,7 +193,7 @@ Default configuration:
 ```yaml
 jobs:
   test:
-    uses: MrThearMan/CI/.github/workflows/docs.yml@v0.3.5
+    uses: MrThearMan/CI/.github/workflows/docs.yml@v0.4.0
     with:
       poetry-version: "1.5.1"
 ```
@@ -209,7 +209,7 @@ Default configuration:
 ```yaml
 jobs:
   test:
-    uses: MrThearMan/CI/.github/workflows/docs.yml@v0.3.5
+    uses: MrThearMan/CI/.github/workflows/docs.yml@v0.4.0
     with:
       python-version: "3.11"
 ```
@@ -225,7 +225,7 @@ Default configuration:
 ```yaml
 jobs:
   test:
-    uses: MrThearMan/CI/.github/workflows/docs.yml@v0.3.5
+    uses: MrThearMan/CI/.github/workflows/docs.yml@v0.4.0
     with:
       os: "ubuntu-latest"
 ```
@@ -246,7 +246,7 @@ with the following job configuration. The `pypi-token` input is required.
 ```yaml
 jobs:
   test:
-    uses: MrThearMan/CI/.github/workflows/release.yml@v0.3.5
+    uses: MrThearMan/CI/.github/workflows/release.yml@v0.4.0
     secrets:
       pypi-token: ${{ secrets.PYPI_API_TOKEN }}
 ```
@@ -266,7 +266,7 @@ Default configuration:
 ```yaml
 jobs:
   test:
-    uses: MrThearMan/CI/.github/workflows/release.yml@v0.3.5
+    uses: MrThearMan/CI/.github/workflows/release.yml@v0.4.0
     with:
       poetry-version: "1.5.1"
 ```
@@ -282,7 +282,7 @@ Default configuration:
 ```yaml
 jobs:
   test:
-    uses: MrThearMan/CI/.github/workflows/release.yml@v0.3.5
+    uses: MrThearMan/CI/.github/workflows/release.yml@v0.4.0
     with:
       python-version: "3.11"
 ```
@@ -298,7 +298,7 @@ Default configuration:
 ```yaml
 jobs:
   test:
-    uses: MrThearMan/CI/.github/workflows/release.yml@v0.3.5
+    uses: MrThearMan/CI/.github/workflows/release.yml@v0.4.0
     with:
       os: "ubuntu-latest"
 ```

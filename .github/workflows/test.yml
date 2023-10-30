@@ -31,25 +31,34 @@ jobs:
         python-version: ${{ fromJSON(inputs.python-version) }}
         exclude: ${{ fromJSON(inputs.exclude) }}
 
+    defaults:
+      run:
+        shell: bash
+
     steps:
       - name: "Check out repository"
         uses: actions/checkout@v3
-
-      - name: "Install poetry"
-        run: pipx install "poetry==${{ inputs.poetry-version }}"
 
       - name: "Set up python"
         id: setup-python
         uses: actions/setup-python@v4
         with:
-          cache: "poetry"
           python-version: ${{ matrix.python-version }}
+
+      - uses: MrThearMan/CI/.github/actions/poetry@v0.4.0
+
+      - name: "Load cached poetry environment"
+        uses: actions/cache@v3
+        id: cache
+        with:
+          path: .venv
+          key: cache-v1-venv-python${{ steps.setup-python.outputs.python-version }}-${{ matrix.os }}-${{ hashFiles('**/poetry.lock') }}
 
       - name: "Load cached tox environment"
         uses: actions/cache@v3
         with:
           path: .tox
-          key: cache-v1-python${{ steps.setup-python.outputs.python-version }}-${{ matrix.os }}-${{ hashFiles('**/poetry.lock') }}
+          key: cache-v1-tox-python${{ steps.setup-python.outputs.python-version }}-${{ matrix.os }}-${{ hashFiles('**/poetry.lock') }}
 
       - name: "Pre-test hook"
         if: ${{ hashFiles('.github/actions/pre-test/action.yml') != '' }}

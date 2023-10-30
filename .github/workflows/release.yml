@@ -23,18 +23,27 @@ jobs:
   publish:
     runs-on: ${{ inputs.os }}
 
+    defaults:
+      run:
+        shell: bash
+
     steps:
       - name: "Check out repository"
         uses: actions/checkout@v3
 
-      - name: "Install poetry"
-        run: pipx install "poetry==${{ inputs.poetry-version }}"
-
       - name: "Set up python"
         uses: actions/setup-python@v4
         with:
-          cache: "poetry"
           python-version: ${{ inputs.python-version }}
+
+      - uses: MrThearMan/CI/.github/actions/poetry@v0.4.0
+
+      - name: "Load cached poetry environment"
+        uses: actions/cache@v3
+        id: cache
+        with:
+          path: .venv
+          key: cache-v1-release-python${{ steps.setup-python.outputs.python-version }}-${{ inputs.os }}
 
       - name: "Pre-release hook"
         if: ${{ hashFiles('.github/actions/pre-release/action.yml') != '' }}
@@ -42,6 +51,12 @@ jobs:
 
       - name: "Install dependencies"
         run: poetry install
+
+      - name: "Test that project version matches release version"
+        run: |
+          echo "Project version: '$(poetry version -s | tr -d '\n')'"
+          echo "Release version: '$(echo $GITHUB_REF_NAME | tr -d 'v')'"
+          test $(poetry version -s | tr -d '\n') == $(echo $GITHUB_REF_NAME | tr -d 'v')
 
       - name: "Publish on PyPi"
         run: poetry publish --build
