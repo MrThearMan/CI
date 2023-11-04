@@ -14,7 +14,7 @@ on:
       poetry-version:
         required: false
         type: string
-        default: "1.6.1"
+        default: "1.7.0"
       exclude:
         required: false
         type: string
@@ -45,7 +45,10 @@ jobs:
         with:
           python-version: ${{ matrix.python-version }}
 
-      - uses: MrThearMan/CI/.github/actions/poetry@v0.4.0
+      - uses: MrThearMan/CI/.github/actions/poetry@v0.4.1
+        with:
+          os: ${{ matrix.os }}
+          poetry-version: ${{ inputs.poetry-version }}
 
       - name: "Load cached poetry environment"
         uses: actions/cache@v3

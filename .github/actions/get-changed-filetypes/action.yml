@@ -26,6 +26,6 @@ runs:
         | sort
         | uniq
         | rev
-        | grep -wE ${{ filetypes }}
+        | grep -wE ${{ inputs.filetypes }}
         | xargs
         )" >> $GITHUB_OUTPUT

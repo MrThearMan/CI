@@ -1,21 +1,29 @@
 name: "poetry"
-description: "Install poetry"
+description: "Install poetry, set it to path, and config virtualenvs in project for easier caching."
+
+inputs:
+  os:
+    description: "OS the runner is on. Supports 'ubuntu-latest', 'macos-latest', and 'windows-latest'."
+    default: "ubuntu-latest"
+  poetry-version:
+    description: "Poetry version to use."
+    default: "1.7.0"
 
 runs:
   using: composite
 
   steps:
     - name: "Install poetry"
-      run: curl -sSL https://install.python-poetry.org | python - -y
+      run: curl -sSL https://install.python-poetry.org | POETRY_VERSION=${{ inputs.poetry-version }} python - -y
       shell: bash
 
     - name: "Add poetry to PATH (Ubuntu/Mac)"
-      if: ${{ matrix.os != 'windows-latest' }}
+      if: ${{ inputs.os != 'windows-latest' }}
       run: echo "$HOME/.local/bin" >> $GITHUB_PATH
       shell: bash
 
     - name: "Add poetry to PATH (Windows)"
-      if: ${{ matrix.os == 'windows-latest' }}
+      if: ${{ inputs.os == 'windows-latest' }}
       run: echo "$APPDATA\Python\Scripts" >> $GITHUB_PATH
       shell: bash
 

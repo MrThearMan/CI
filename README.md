@@ -84,7 +84,7 @@ with the following job configuration.
 ```yaml
 jobs:
   test:
-    uses: MrThearMan/CI/.github/workflows/test.yml@v0.4.0
+    uses: MrThearMan/CI/.github/workflows/test.yml@v0.4.1
 ```
 
 This job can take a number of inputs via the [with]-keyword.
@@ -102,7 +102,7 @@ Default configuration:
 ```yaml
 jobs:
   test:
-    uses: MrThearMan/CI/.github/workflows/test.yml@v0.4.0
+    uses: MrThearMan/CI/.github/workflows/test.yml@v0.4.1
     with:
       python-version: '["3.9", "3.10", "3.11"]'
 ```
@@ -118,7 +118,7 @@ Default configuration:
 ```yaml
 jobs:
   test:
-    uses: MrThearMan/CI/.github/workflows/test.yml@v0.4.0
+    uses: MrThearMan/CI/.github/workflows/test.yml@v0.4.1
     with:
       os: '["ubuntu-latest", "macos-latest", "windows-latest"]'
 ```
@@ -134,9 +134,9 @@ Default configuration:
 ```yaml
 jobs:
   test:
-    uses: MrThearMan/CI/.github/workflows/test.yml@v0.4.0
+    uses: MrThearMan/CI/.github/workflows/test.yml@v0.4.1
     with:
-      poetry-version: "1.5.1"
+      poetry-version: "1.7.0"
 ```
 
 ---
@@ -152,7 +152,7 @@ Default configuration:
 ```yaml
 jobs:
   test:
-    uses: MrThearMan/CI/.github/workflows/test.yml@v0.4.0
+    uses: MrThearMan/CI/.github/workflows/test.yml@v0.4.1
     with:
       exclude: '[{"os": "none", "python-version": "none"}]'  # this ignores nothing
 ```
@@ -180,7 +180,7 @@ with the following job configuration.
 ```yaml
 jobs:
   test:
-    uses: MrThearMan/CI/.github/workflows/docs.yml@v0.4.0
+    uses: MrThearMan/CI/.github/workflows/docs.yml@v0.4.1
 ```
 
 This job can take a number of inputs via the [with]-keyword.
@@ -196,9 +196,9 @@ Default configuration:
 ```yaml
 jobs:
   test:
-    uses: MrThearMan/CI/.github/workflows/docs.yml@v0.4.0
+    uses: MrThearMan/CI/.github/workflows/docs.yml@v0.4.1
     with:
-      poetry-version: "1.5.1"
+      poetry-version: "1.7.0"
 ```
 
 ---
@@ -212,7 +212,7 @@ Default configuration:
 ```yaml
 jobs:
   test:
-    uses: MrThearMan/CI/.github/workflows/docs.yml@v0.4.0
+    uses: MrThearMan/CI/.github/workflows/docs.yml@v0.4.1
     with:
       python-version: "3.11"
 ```
@@ -228,7 +228,7 @@ Default configuration:
 ```yaml
 jobs:
   test:
-    uses: MrThearMan/CI/.github/workflows/docs.yml@v0.4.0
+    uses: MrThearMan/CI/.github/workflows/docs.yml@v0.4.1
     with:
       os: "ubuntu-latest"
 ```
@@ -249,7 +249,7 @@ with the following job configuration. The `pypi-token` input is required.
 ```yaml
 jobs:
   test:
-    uses: MrThearMan/CI/.github/workflows/release.yml@v0.4.0
+    uses: MrThearMan/CI/.github/workflows/release.yml@v0.4.1
     secrets:
       pypi-token: ${{ secrets.PYPI_API_TOKEN }}
 ```
@@ -269,9 +269,9 @@ Default configuration:
 ```yaml
 jobs:
   test:
-    uses: MrThearMan/CI/.github/workflows/release.yml@v0.4.0
+    uses: MrThearMan/CI/.github/workflows/release.yml@v0.4.1
     with:
-      poetry-version: "1.5.1"
+      poetry-version: "1.7.0"
 ```
 
 ---
@@ -285,7 +285,7 @@ Default configuration:
 ```yaml
 jobs:
   test:
-    uses: MrThearMan/CI/.github/workflows/release.yml@v0.4.0
+    uses: MrThearMan/CI/.github/workflows/release.yml@v0.4.1
     with:
       python-version: "3.11"
 ```
@@ -301,7 +301,7 @@ Default configuration:
 ```yaml
 jobs:
   test:
-    uses: MrThearMan/CI/.github/workflows/release.yml@v0.4.0
+    uses: MrThearMan/CI/.github/workflows/release.yml@v0.4.1
     with:
       os: "ubuntu-latest"
 ```
@@ -358,13 +358,16 @@ jobs:
   <foo>:
     steps:
       - ...
-      - uses: MrThearMan/CI/.github/actions/poetry@v0.4.0
+      - uses: MrThearMan/CI/.github/actions/poetry@v0.4.1
+        with:
+          os: "ubuntu-latest"
+          poetry-version: "1.7.0"
 ```
 
 However, `actions/setup-python` [poetry caching] cannot be used if poetry is not installed.
 In this case, a custom cache must be created:
 
-```
+```yaml
 jobs:
   <foo>:
     steps:
@@ -386,7 +389,7 @@ Can be used to check if certain filetypes were changed in a pull request.
 jobs:
   <foo>:
     steps:
-      - uses: MrThearMan/CI/.github/actions/get-changed-filetypes@v0.4.0
+      - uses: MrThearMan/CI/.github/actions/get-changed-filetypes@v0.4.1
         id: changed
         with:
           filetypes: "py|yaml"
