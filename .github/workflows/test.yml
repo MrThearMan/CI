@@ -14,7 +14,7 @@ on:
       poetry-version:
         required: false
         type: string
-        default: "1.7.0"
+        default: "1.7.1"
       exclude:
         required: false
         type: string
@@ -24,6 +24,11 @@ jobs:
   test:
     name: ${{ matrix.python-version }}-${{ matrix.os }}
     runs-on: ${{ matrix.os }}
+
+    # Cancel a workflow from the same PR, branch or tag when a new workflow is triggered.
+    concurrency:
+      group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+      cancel-in-progress: true
 
     strategy:
       matrix:
@@ -45,7 +50,7 @@ jobs:
         with:
           python-version: ${{ matrix.python-version }}
 
-      - uses: MrThearMan/CI/.github/actions/poetry@v0.4.1
+      - uses: MrThearMan/CI/.github/actions/poetry@v0.4.2
         with:
           os: ${{ matrix.os }}
           poetry-version: ${{ inputs.poetry-version }}

@@ -65,7 +65,7 @@ commands =
 """
 
 [build-system]
-requires = ["poetry-core>=1.7.0"]
+requires = ["poetry-core>=1.8.1"]
 build-backend = "poetry.core.masonry.api"
 ```
 
@@ -82,9 +82,22 @@ To set up the pipeline, add a `yml` file to `./.github/workflows/`
 with the following job configuration.
 
 ```yaml
+name: Tests
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - "**.py"
+      - "pyproject.toml"
+      - "poetry.lock"
+  pull_request:
+  workflow_dispatch:
+
 jobs:
   test:
-    uses: MrThearMan/CI/.github/workflows/test.yml@v0.4.1
+    uses: MrThearMan/CI/.github/workflows/test.yml@v0.4.2
 ```
 
 This job can take a number of inputs via the [with]-keyword.
@@ -102,7 +115,7 @@ Default configuration:
 ```yaml
 jobs:
   test:
-    uses: MrThearMan/CI/.github/workflows/test.yml@v0.4.1
+    uses: MrThearMan/CI/.github/workflows/test.yml@v0.4.2
     with:
       python-version: '["3.9", "3.10", "3.11"]'
 ```
@@ -118,7 +131,7 @@ Default configuration:
 ```yaml
 jobs:
   test:
-    uses: MrThearMan/CI/.github/workflows/test.yml@v0.4.1
+    uses: MrThearMan/CI/.github/workflows/test.yml@v0.4.2
     with:
       os: '["ubuntu-latest", "macos-latest", "windows-latest"]'
 ```
@@ -134,9 +147,9 @@ Default configuration:
 ```yaml
 jobs:
   test:
-    uses: MrThearMan/CI/.github/workflows/test.yml@v0.4.1
+    uses: MrThearMan/CI/.github/workflows/test.yml@v0.4.2
     with:
-      poetry-version: "1.7.0"
+      poetry-version: "1.7.1"
 ```
 
 ---
@@ -152,7 +165,7 @@ Default configuration:
 ```yaml
 jobs:
   test:
-    uses: MrThearMan/CI/.github/workflows/test.yml@v0.4.1
+    uses: MrThearMan/CI/.github/workflows/test.yml@v0.4.2
     with:
       exclude: '[{"os": "none", "python-version": "none"}]'  # this ignores nothing
 ```
@@ -178,9 +191,20 @@ To set up the pipeline, add a `yml` file to `./.github/workflows/`
 with the following job configuration.
 
 ```yaml
+name: Docs
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - "docs/**"
+      - "mkdocs.yml"
+  workflow_dispatch:
+
 jobs:
   test:
-    uses: MrThearMan/CI/.github/workflows/docs.yml@v0.4.1
+    uses: MrThearMan/CI/.github/workflows/docs.yml@v0.4.2
 ```
 
 This job can take a number of inputs via the [with]-keyword.
@@ -196,9 +220,9 @@ Default configuration:
 ```yaml
 jobs:
   test:
-    uses: MrThearMan/CI/.github/workflows/docs.yml@v0.4.1
+    uses: MrThearMan/CI/.github/workflows/docs.yml@v0.4.2
     with:
-      poetry-version: "1.7.0"
+      poetry-version: "1.7.1"
 ```
 
 ---
@@ -212,7 +236,7 @@ Default configuration:
 ```yaml
 jobs:
   test:
-    uses: MrThearMan/CI/.github/workflows/docs.yml@v0.4.1
+    uses: MrThearMan/CI/.github/workflows/docs.yml@v0.4.2
     with:
       python-version: "3.11"
 ```
@@ -228,7 +252,7 @@ Default configuration:
 ```yaml
 jobs:
   test:
-    uses: MrThearMan/CI/.github/workflows/docs.yml@v0.4.1
+    uses: MrThearMan/CI/.github/workflows/docs.yml@v0.4.2
     with:
       os: "ubuntu-latest"
 ```
@@ -247,9 +271,16 @@ To set up the pipeline, add a `yml` file to `./.github/workflows/`
 with the following job configuration. The `pypi-token` input is required.
 
 ```yaml
+name: Release
+
+on:
+  release:
+    types:
+      - created
+
 jobs:
   test:
-    uses: MrThearMan/CI/.github/workflows/release.yml@v0.4.1
+    uses: MrThearMan/CI/.github/workflows/release.yml@v0.4.2
     secrets:
       pypi-token: ${{ secrets.PYPI_API_TOKEN }}
 ```
@@ -269,9 +300,9 @@ Default configuration:
 ```yaml
 jobs:
   test:
-    uses: MrThearMan/CI/.github/workflows/release.yml@v0.4.1
+    uses: MrThearMan/CI/.github/workflows/release.yml@v0.4.2
     with:
-      poetry-version: "1.7.0"
+      poetry-version: "1.7.1"
 ```
 
 ---
@@ -285,7 +316,7 @@ Default configuration:
 ```yaml
 jobs:
   test:
-    uses: MrThearMan/CI/.github/workflows/release.yml@v0.4.1
+    uses: MrThearMan/CI/.github/workflows/release.yml@v0.4.2
     with:
       python-version: "3.11"
 ```
@@ -301,7 +332,7 @@ Default configuration:
 ```yaml
 jobs:
   test:
-    uses: MrThearMan/CI/.github/workflows/release.yml@v0.4.1
+    uses: MrThearMan/CI/.github/workflows/release.yml@v0.4.2
     with:
       os: "ubuntu-latest"
 ```
@@ -358,10 +389,10 @@ jobs:
   <foo>:
     steps:
       - ...
-      - uses: MrThearMan/CI/.github/actions/poetry@v0.4.1
+      - uses: MrThearMan/CI/.github/actions/poetry@v0.4.2
         with:
           os: "ubuntu-latest"
-          poetry-version: "1.7.0"
+          poetry-version: "1.7.1"
 ```
 
 However, `actions/setup-python` [poetry caching] cannot be used if poetry is not installed.
@@ -389,11 +420,11 @@ Can be used to check if certain filetypes were changed in a pull request.
 jobs:
   <foo>:
     steps:
-      - uses: MrThearMan/CI/.github/actions/get-changed-filetypes@v0.4.1
+      - uses: MrThearMan/CI/.github/actions/get-changed-filetypes@v0.4.2
         id: changed
         with:
           filetypes: "py|yaml"
-      - if: ${{ changed.changed-filetypes ... }}
+      - if: ${{ changed.changed-filetypes }}
 ```
 
 
