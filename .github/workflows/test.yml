@@ -25,9 +25,9 @@ jobs:
     name: ${{ matrix.python-version }}-${{ matrix.os }}
     runs-on: ${{ matrix.os }}
 
-    # Cancel a workflow from the same PR, branch or tag when a new workflow is triggered.
+    # Cancel old workflows when a new workflow is triggered for the same PR/branch/tag & python version & OS.
     concurrency:
-      group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+      group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}-${{ matrix.python-version }}-${{ matrix.os }}
       cancel-in-progress: true
 
     strategy:
@@ -50,7 +50,7 @@ jobs:
         with:
           python-version: ${{ matrix.python-version }}
 
-      - uses: MrThearMan/CI/.github/actions/poetry@v0.4.2
+      - uses: MrThearMan/CI/.github/actions/poetry@v0.4.3
         with:
           os: ${{ matrix.os }}
           poetry-version: ${{ inputs.poetry-version }}

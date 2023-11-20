@@ -97,7 +97,7 @@ on:
 
 jobs:
   test:
-    uses: MrThearMan/CI/.github/workflows/test.yml@v0.4.2
+    uses: MrThearMan/CI/.github/workflows/test.yml@v0.4.3
 ```
 
 This job can take a number of inputs via the [with]-keyword.
@@ -115,7 +115,7 @@ Default configuration:
 ```yaml
 jobs:
   test:
-    uses: MrThearMan/CI/.github/workflows/test.yml@v0.4.2
+    uses: MrThearMan/CI/.github/workflows/test.yml@v0.4.3
     with:
       python-version: '["3.9", "3.10", "3.11"]'
 ```
@@ -131,7 +131,7 @@ Default configuration:
 ```yaml
 jobs:
   test:
-    uses: MrThearMan/CI/.github/workflows/test.yml@v0.4.2
+    uses: MrThearMan/CI/.github/workflows/test.yml@v0.4.3
     with:
       os: '["ubuntu-latest", "macos-latest", "windows-latest"]'
 ```
@@ -147,7 +147,7 @@ Default configuration:
 ```yaml
 jobs:
   test:
-    uses: MrThearMan/CI/.github/workflows/test.yml@v0.4.2
+    uses: MrThearMan/CI/.github/workflows/test.yml@v0.4.3
     with:
       poetry-version: "1.7.1"
 ```
@@ -165,7 +165,7 @@ Default configuration:
 ```yaml
 jobs:
   test:
-    uses: MrThearMan/CI/.github/workflows/test.yml@v0.4.2
+    uses: MrThearMan/CI/.github/workflows/test.yml@v0.4.3
     with:
       exclude: '[{"os": "none", "python-version": "none"}]'  # this ignores nothing
 ```
@@ -204,7 +204,7 @@ on:
 
 jobs:
   test:
-    uses: MrThearMan/CI/.github/workflows/docs.yml@v0.4.2
+    uses: MrThearMan/CI/.github/workflows/docs.yml@v0.4.3
 ```
 
 This job can take a number of inputs via the [with]-keyword.
@@ -220,7 +220,7 @@ Default configuration:
 ```yaml
 jobs:
   test:
-    uses: MrThearMan/CI/.github/workflows/docs.yml@v0.4.2
+    uses: MrThearMan/CI/.github/workflows/docs.yml@v0.4.3
     with:
       poetry-version: "1.7.1"
 ```
@@ -236,7 +236,7 @@ Default configuration:
 ```yaml
 jobs:
   test:
-    uses: MrThearMan/CI/.github/workflows/docs.yml@v0.4.2
+    uses: MrThearMan/CI/.github/workflows/docs.yml@v0.4.3
     with:
       python-version: "3.11"
 ```
@@ -252,7 +252,7 @@ Default configuration:
 ```yaml
 jobs:
   test:
-    uses: MrThearMan/CI/.github/workflows/docs.yml@v0.4.2
+    uses: MrThearMan/CI/.github/workflows/docs.yml@v0.4.3
     with:
       os: "ubuntu-latest"
 ```
@@ -280,7 +280,7 @@ on:
 
 jobs:
   test:
-    uses: MrThearMan/CI/.github/workflows/release.yml@v0.4.2
+    uses: MrThearMan/CI/.github/workflows/release.yml@v0.4.3
     secrets:
       pypi-token: ${{ secrets.PYPI_API_TOKEN }}
 ```
@@ -300,7 +300,7 @@ Default configuration:
 ```yaml
 jobs:
   test:
-    uses: MrThearMan/CI/.github/workflows/release.yml@v0.4.2
+    uses: MrThearMan/CI/.github/workflows/release.yml@v0.4.3
     with:
       poetry-version: "1.7.1"
 ```
@@ -316,7 +316,7 @@ Default configuration:
 ```yaml
 jobs:
   test:
-    uses: MrThearMan/CI/.github/workflows/release.yml@v0.4.2
+    uses: MrThearMan/CI/.github/workflows/release.yml@v0.4.3
     with:
       python-version: "3.11"
 ```
@@ -332,7 +332,7 @@ Default configuration:
 ```yaml
 jobs:
   test:
-    uses: MrThearMan/CI/.github/workflows/release.yml@v0.4.2
+    uses: MrThearMan/CI/.github/workflows/release.yml@v0.4.3
     with:
       os: "ubuntu-latest"
 ```
@@ -389,7 +389,7 @@ jobs:
   <foo>:
     steps:
       - ...
-      - uses: MrThearMan/CI/.github/actions/poetry@v0.4.2
+      - uses: MrThearMan/CI/.github/actions/poetry@v0.4.3
         with:
           os: "ubuntu-latest"
           poetry-version: "1.7.1"
@@ -420,7 +420,7 @@ Can be used to check if certain filetypes were changed in a pull request.
 jobs:
   <foo>:
     steps:
-      - uses: MrThearMan/CI/.github/actions/get-changed-filetypes@v0.4.2
+      - uses: MrThearMan/CI/.github/actions/get-changed-filetypes@v0.4.3
         id: changed
         with:
           filetypes: "py|yaml"
