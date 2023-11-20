@@ -264,8 +264,9 @@ jobs:
 This pipeline can be used to build and release the library to [PyPI] with 
 poetry using a [PyPI token] stored in the repository's [actions secrets].
 
-> Note that the poetry [version] configuration needs to be updated or this
-> job will fail.
+> Note that the poetry [version] configuration needs to be updated and match
+> the tag created for the release or this job will fail (can include v-prefix,
+> e.g., `v0.0.1`).
 
 To set up the pipeline, add a `yml` file to `./.github/workflows/`
 with the following job configuration. The `pypi-token` input is required.
@@ -276,7 +277,7 @@ name: Release
 on:
   release:
     types:
-      - created
+      - released
 
 jobs:
   test:
