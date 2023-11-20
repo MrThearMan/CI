@@ -1,0 +1,35 @@
+name: Auto approve PRs
+
+on:
+  workflow_call:
+    inputs:
+      users:
+        required: false
+        type: string
+        default: '["dependabot[bot]", "pre-commit-ci[bot]"]'
+
+jobs:
+  approve:
+    runs-on: ubuntu-latest
+    permissions:
+      pull-requests: write
+      contents: write
+
+    # Only run if one of the selected authors is present.
+    if: contains(fromJSON(inputs.users), github.event.pull_request.user.login)
+
+    steps:
+      - name: "Check out repository"
+        uses: actions/checkout@v4
+
+      - name: "Approve a pull request and set to auto rebase-merge after successful tests"
+        run: |
+          gh pr checkout "$PR_URL"
+          if [ "$(gh pr status --json reviewDecision -q .currentBranch.reviewDecision)" != "APPROVED" ];
+          then gh pr review --approve "$PR_URL"
+          else echo "PR already approved.";
+          fi
+          gh pr merge --auto --rebase "$PR_URL"
+        env:
+          PR_URL: ${{ github.event.pull_request.html_url }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

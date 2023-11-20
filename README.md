@@ -4,8 +4,9 @@
 
 ## Requirements
 
-There are 3 different pipeline templates, one for testing,
-one for building docs, and one for releasing the library to [PyPI].
+There are 4 different pipeline templates, one for testing,
+one for building docs, one for releasing the library to [PyPI],
+and one for approving pull requests by certain authors automatically.
 
 All templates require the project to use [poetry].
 The testing pipeline requires [tox] and [coverage], as well as 
@@ -97,7 +98,7 @@ on:
 
 jobs:
   test:
-    uses: MrThearMan/CI/.github/workflows/test.yml@v0.4.4
+    uses: MrThearMan/CI/.github/workflows/test.yml@v0.4.5
 ```
 
 This job can take a number of inputs via the [with]-keyword.
@@ -115,7 +116,7 @@ Default configuration:
 ```yaml
 jobs:
   test:
-    uses: MrThearMan/CI/.github/workflows/test.yml@v0.4.4
+    uses: MrThearMan/CI/.github/workflows/test.yml@v0.4.5
     with:
       python-version: '["3.9", "3.10", "3.11"]'
 ```
@@ -131,7 +132,7 @@ Default configuration:
 ```yaml
 jobs:
   test:
-    uses: MrThearMan/CI/.github/workflows/test.yml@v0.4.4
+    uses: MrThearMan/CI/.github/workflows/test.yml@v0.4.5
     with:
       os: '["ubuntu-latest", "macos-latest", "windows-latest"]'
 ```
@@ -147,7 +148,7 @@ Default configuration:
 ```yaml
 jobs:
   test:
-    uses: MrThearMan/CI/.github/workflows/test.yml@v0.4.4
+    uses: MrThearMan/CI/.github/workflows/test.yml@v0.4.5
     with:
       poetry-version: "1.7.1"
 ```
@@ -165,7 +166,7 @@ Default configuration:
 ```yaml
 jobs:
   test:
-    uses: MrThearMan/CI/.github/workflows/test.yml@v0.4.4
+    uses: MrThearMan/CI/.github/workflows/test.yml@v0.4.5
     with:
       exclude: '[{"os": "none", "python-version": "none"}]'  # this ignores nothing
 ```
@@ -204,7 +205,7 @@ on:
 
 jobs:
   test:
-    uses: MrThearMan/CI/.github/workflows/docs.yml@v0.4.4
+    uses: MrThearMan/CI/.github/workflows/docs.yml@v0.4.5
 ```
 
 This job can take a number of inputs via the [with]-keyword.
@@ -220,7 +221,7 @@ Default configuration:
 ```yaml
 jobs:
   test:
-    uses: MrThearMan/CI/.github/workflows/docs.yml@v0.4.4
+    uses: MrThearMan/CI/.github/workflows/docs.yml@v0.4.5
     with:
       poetry-version: "1.7.1"
 ```
@@ -236,7 +237,7 @@ Default configuration:
 ```yaml
 jobs:
   test:
-    uses: MrThearMan/CI/.github/workflows/docs.yml@v0.4.4
+    uses: MrThearMan/CI/.github/workflows/docs.yml@v0.4.5
     with:
       python-version: "3.11"
 ```
@@ -252,7 +253,7 @@ Default configuration:
 ```yaml
 jobs:
   test:
-    uses: MrThearMan/CI/.github/workflows/docs.yml@v0.4.4
+    uses: MrThearMan/CI/.github/workflows/docs.yml@v0.4.5
     with:
       os: "ubuntu-latest"
 ```
@@ -281,7 +282,7 @@ on:
 
 jobs:
   test:
-    uses: MrThearMan/CI/.github/workflows/release.yml@v0.4.4
+    uses: MrThearMan/CI/.github/workflows/release.yml@v0.4.5
     secrets:
       pypi-token: ${{ secrets.PYPI_API_TOKEN }}
 ```
@@ -301,7 +302,7 @@ Default configuration:
 ```yaml
 jobs:
   test:
-    uses: MrThearMan/CI/.github/workflows/release.yml@v0.4.4
+    uses: MrThearMan/CI/.github/workflows/release.yml@v0.4.5
     with:
       poetry-version: "1.7.1"
 ```
@@ -317,7 +318,7 @@ Default configuration:
 ```yaml
 jobs:
   test:
-    uses: MrThearMan/CI/.github/workflows/release.yml@v0.4.4
+    uses: MrThearMan/CI/.github/workflows/release.yml@v0.4.5
     with:
       python-version: "3.11"
 ```
@@ -333,9 +334,52 @@ Default configuration:
 ```yaml
 jobs:
   test:
-    uses: MrThearMan/CI/.github/workflows/release.yml@v0.4.4
+    uses: MrThearMan/CI/.github/workflows/release.yml@v0.4.5
     with:
       os: "ubuntu-latest"
+```
+
+---
+
+### Pull request approval pipeline
+
+This pipeline can be used to automatically approve pull request by some users.
+By default, it is set to approve pull requests by the [dependabot] and
+[pre-commit.ci] bots.
+
+To set up the pipeline, add a `yml` file to `./.github/workflows/`
+with the following job configuration.
+
+```yaml
+name: Auto approve PRs
+
+on: 
+  pull_request_target:
+
+jobs:
+  approve:
+    permissions:
+      pull-requests: write
+      contents: write
+    uses: MrThearMan/CI/.github/workflows/approve.yml@v0.4.5
+```
+
+This job can take a number of inputs via the [with]-keyword.
+
+---
+
+#### `users`
+
+Configure the users whose pull requests can be automatically approved.
+
+Default configuration:
+
+```yaml
+jobs:
+  approve:
+    uses: MrThearMan/CI/.github/workflows/approve.yml@v0.4.5
+    with:
+      users: '["dependabot[bot]", "pre-commit-ci[bot]"]'
 ```
 
 ---
@@ -390,7 +434,7 @@ jobs:
   <foo>:
     steps:
       - ...
-      - uses: MrThearMan/CI/.github/actions/poetry@v0.4.4
+      - uses: MrThearMan/CI/.github/actions/poetry@v0.4.5
         with:
           os: "ubuntu-latest"
           poetry-version: "1.7.1"
@@ -421,7 +465,7 @@ Can be used to check if certain filetypes were changed in a pull request.
 jobs:
   <foo>:
     steps:
-      - uses: MrThearMan/CI/.github/actions/get-changed-filetypes@v0.4.4
+      - uses: MrThearMan/CI/.github/actions/get-changed-filetypes@v0.4.5
         id: changed
         with:
           filetypes: "py|yaml"
@@ -447,3 +491,5 @@ jobs:
 [version]: https://python-poetry.org/docs/pyproject#version
 [composite action]: https://docs.github.com/en/actions/creating-actions/creating-a-composite-action
 [poetry caching]: https://github.com/actions/setup-python/blob/main/docs/advanced-usage.md#caching-packages
+[dependabot]: https://github.com/dependabot
+[pre-commit.ci]: https://github.com/apps/pre-commit-ci

@@ -29,14 +29,14 @@ jobs:
 
     steps:
       - name: "Check out repository"
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: "Set up python"
         uses: actions/setup-python@v4
         with:
           python-version: ${{ inputs.python-version }}
 
-      - uses: MrThearMan/CI/.github/actions/poetry@v0.4.4
+      - uses: MrThearMan/CI/.github/actions/poetry@v0.4.5
         with:
           os: ${{ inputs.os }}
           poetry-version: ${{ inputs.poetry-version }}
