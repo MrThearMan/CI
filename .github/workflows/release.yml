@@ -36,7 +36,7 @@ jobs:
         with:
           python-version: ${{ inputs.python-version }}
 
-      - uses: MrThearMan/CI/.github/actions/poetry@v0.4.3
+      - uses: MrThearMan/CI/.github/actions/poetry@v0.4.4
         with:
           os: ${{ inputs.os }}
           poetry-version: ${{ inputs.poetry-version }}
@@ -57,8 +57,8 @@ jobs:
       - name: "Test that project version matches release version"
         run: |
           echo "Project version: '$(poetry version -s | tr -d '\n')'"
-          echo "Release version: '$(echo $GITHUB_REF_NAME | tr -d 'v')'"
-          test $(poetry version -s | tr -d '\n') == $(echo $GITHUB_REF_NAME | tr -d 'v')
+          echo "Release version: '$(echo ${{ github.event.release.tag_name }} | tr -d 'v')'"
+          test $(poetry version -s | tr -d '\n') == $(echo ${{ github.event.release.tag_name }} | tr -d 'v')
 
       - name: "Publish on PyPi"
         run: poetry publish --build
