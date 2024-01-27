@@ -33,13 +33,13 @@ jobs:
         with:
           python-version: ${{ inputs.python-version }}
 
-      - uses: MrThearMan/CI/.github/actions/poetry@v0.4.5
+      - uses: MrThearMan/CI/.github/actions/poetry@v0.4.6
         with:
           os: ${{ inputs.os }}
           poetry-version: ${{ inputs.poetry-version }}
 
       - name: "Load cached poetry environment"
-        uses: actions/cache@v3
+        uses: actions/cache@v4
         with:
           path: .venv
           key: cache-v1-docs-python${{ steps.setup-python.outputs.python-version }}-${{ inputs.os }}
