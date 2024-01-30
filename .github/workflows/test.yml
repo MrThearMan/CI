@@ -50,19 +50,22 @@ jobs:
         with:
           python-version: ${{ matrix.python-version }}
 
-      - uses: MrThearMan/CI/.github/actions/poetry@v0.4.7
+      - uses: MrThearMan/CI/.github/actions/poetry@main
         with:
           os: ${{ matrix.os }}
           poetry-version: ${{ inputs.poetry-version }}
+          python-version: ${{ matrix.python-version }}
 
       - name: "Load cached poetry environment"
         uses: actions/cache@v4
+        id: venv-cache
         with:
           path: .venv
           key: cache-v1-venv-python${{ steps.setup-python.outputs.python-version }}-${{ matrix.os }}-${{ hashFiles('**/poetry.lock') }}
 
       - name: "Load cached tox environment"
         uses: actions/cache@v4
+        id: tox-cache
         with:
           path: .tox
           key: cache-v1-tox-python${{ steps.setup-python.outputs.python-version }}-${{ matrix.os }}-${{ hashFiles('**/poetry.lock') }}

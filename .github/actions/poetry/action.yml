@@ -8,12 +8,36 @@ inputs:
   poetry-version:
     description: "Poetry version to use."
     default: "1.7.1"
+  python-version:
+    description: "Python version to use."
+    default: "unknown"
 
 runs:
   using: composite
 
   steps:
+    - name: "Load cached poetry installation (Ubuntu/Mac)"
+      uses: actions/cache@v4
+      id: poetry-install-cache-unix
+      if: ${{ inputs.os != 'windows-latest' }}
+      with:
+        path: |
+          ~/.local/share/pypoetry
+          ~/.local/bin
+        key: cache-poetry-${{ inputs.poetry-version }}-python${{ inputs.python-version }}-${{ inputs.os }}-v1
+
+    - name: "Load cached poetry installation (Windows)"
+      uses: actions/cache@v4
+      id: poetry-install-cache-windows
+      if: ${{ inputs.os == 'windows-latest' }}
+      with:
+        path: |
+          ~\AppData\Roaming\pypoetry
+          ~\AppData\Roaming\Python\Scripts
+        key: cache-poetry-${{ inputs.poetry-version }}-python${{ inputs.python-version }}-${{ inputs.os }}-v1
+
     - name: "Install poetry"
+      if: steps.poetry-install-cache-unix.outputs.cache-hit != 'true' || steps.poetry-install-cache-windows.outputs.cache-hit != 'true'
       run: curl -sSL https://install.python-poetry.org | POETRY_VERSION=${{ inputs.poetry-version }} python - -y
       shell: bash
 
