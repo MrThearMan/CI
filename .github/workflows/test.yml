@@ -50,11 +50,11 @@ jobs:
         with:
           python-version: ${{ matrix.python-version }}
 
-      - uses: MrThearMan/CI/.github/actions/poetry@v0.4.8
+      - uses: MrThearMan/CI/.github/actions/poetry@v0.4.9
         with:
           os: ${{ matrix.os }}
           poetry-version: ${{ inputs.poetry-version }}
-          python-version: ${{ matrix.python-version }}
+          python-version: ${{ steps.setup-python.outputs.python-version }}
 
       - name: "Load cached poetry environment"
         uses: actions/cache@v4
