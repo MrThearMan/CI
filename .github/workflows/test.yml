@@ -14,11 +14,15 @@ on:
       poetry-version:
         required: false
         type: string
-        default: "1.7.1"
+        default: "1.8.3"
       exclude:
         required: false
         type: string
         default: '[{"os": "none", "python-version": "none"}]'
+      submodules:
+        required: false
+        type: boolean
+        default: false
 
 jobs:
   test:
@@ -43,6 +47,8 @@ jobs:
     steps:
       - name: "Check out repository"
         uses: actions/checkout@v4
+        with:
+          submodules: ${{ inputs.submodules }}
 
       - name: "Set up python"
         id: setup-python
@@ -50,7 +56,7 @@ jobs:
         with:
           python-version: ${{ matrix.python-version }}
 
-      - uses: MrThearMan/CI/.github/actions/poetry@v0.4.9
+      - uses: MrThearMan/CI/.github/actions/poetry@v0.4.10
         with:
           os: ${{ matrix.os }}
           poetry-version: ${{ inputs.poetry-version }}
