@@ -27,6 +27,10 @@ on:
         required: false
         type: number
         default: 1
+      coveralls:
+        required: false
+        type: boolean
+        default: true
 
 jobs:
   test:
@@ -101,6 +105,7 @@ jobs:
         uses: ./.github/actions/post-test
 
       - name: "Submit coverage"
+        if: ${{ inputs.coveralls }}
         uses: coverallsapp/github-action@v2
         with:
           file: coverage.xml
@@ -110,6 +115,7 @@ jobs:
   submit-coverage:
     needs: test
     runs-on: "ubuntu-latest"
+    if: ${{ inputs.coveralls }}
     steps:
       - name: "Finnish coverage report"
         uses: coverallsapp/github-action@v2
