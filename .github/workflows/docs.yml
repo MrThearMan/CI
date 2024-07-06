@@ -45,7 +45,7 @@ jobs:
         with:
           python-version: ${{ inputs.python-version }}
 
-      - uses: MrThearMan/CI/.github/actions/poetry@v0.4.11
+      - uses: MrThearMan/CI/.github/actions/poetry@v0.4.12
         with:
           os: ${{ inputs.os }}
           poetry-version: ${{ inputs.poetry-version }}
