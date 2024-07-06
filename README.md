@@ -173,6 +173,56 @@ jobs:
 
 ---
 
+#### `submodules`
+
+Should submodules be checked out with the repository?
+
+Default configuration:
+
+```yaml
+jobs:
+  test:
+    uses: MrThearMan/CI/.github/workflows/test.yml@v0.4.11
+    with:
+      submodules: false
+```
+
+---
+
+#### `fetch-depth`
+
+How many commit to fetch from the branch history?
+If set to 0, every commit is fetched.
+
+Default configuration:
+
+```yaml
+jobs:
+  test:
+    uses: MrThearMan/CI/.github/workflows/test.yml@v0.4.11
+    with:
+      fetch-depth: 1
+```
+
+---
+
+#### `coveralls`
+
+Should coverage results be submitted to [coveralls]?
+Requires coveralls setup to already exist.
+
+Default configuration:
+
+```yaml
+jobs:
+  test:
+    uses: MrThearMan/CI/.github/workflows/test.yml@v0.4.11
+    with:
+      coveralls: true
+```
+
+---
+
 ### Docs building pipeline
 
 This pipeline can be used to build and push the docs used for 
@@ -260,6 +310,39 @@ jobs:
 
 ---
 
+#### `submodules`
+
+Should submodules be checked out with the repository?
+
+Default configuration:
+
+```yaml
+jobs:
+  test:
+    uses: MrThearMan/CI/.github/workflows/test.yml@v0.4.11
+    with:
+      submodules: false
+```
+
+---
+
+#### `fetch-depth`
+
+How many commit to fetch from the branch history?
+If set to 0, every commit is fetched.
+
+Default configuration:
+
+```yaml
+jobs:
+  test:
+    uses: MrThearMan/CI/.github/workflows/test.yml@v0.4.11
+    with:
+      fetch-depth: 1
+```
+
+---
+
 ### PyPI release pipeline
 
 This pipeline can be used to build and release the library to [PyPI] with 
@@ -341,6 +424,39 @@ jobs:
 
 ---
 
+#### `submodules`
+
+Should submodules be checked out with the repository?
+
+Default configuration:
+
+```yaml
+jobs:
+  test:
+    uses: MrThearMan/CI/.github/workflows/test.yml@v0.4.11
+    with:
+      submodules: false
+```
+
+---
+
+#### `fetch-depth`
+
+How many commit to fetch from the branch history?
+If set to 0, every commit is fetched.
+
+Default configuration:
+
+```yaml
+jobs:
+  test:
+    uses: MrThearMan/CI/.github/workflows/test.yml@v0.4.11
+    with:
+      fetch-depth: 1
+```
+
+---
+
 ### Pull request approval pipeline
 
 This pipeline can be used to automatically approve pull request by some users.
@@ -380,6 +496,39 @@ jobs:
     uses: MrThearMan/CI/.github/workflows/approve.yml@v0.4.11
     with:
       users: '["dependabot[bot]", "pre-commit-ci[bot]"]'
+```
+
+---
+
+#### `submodules`
+
+Should submodules be checked out with the repository?
+
+Default configuration:
+
+```yaml
+jobs:
+  test:
+    uses: MrThearMan/CI/.github/workflows/test.yml@v0.4.11
+    with:
+      submodules: false
+```
+
+---
+
+#### `fetch-depth`
+
+How many commit to fetch from the branch history?
+If set to 0, every commit is fetched.
+
+Default configuration:
+
+```yaml
+jobs:
+  test:
+    uses: MrThearMan/CI/.github/workflows/test.yml@v0.4.11
+    with:
+      fetch-depth: 1
 ```
 
 ---
