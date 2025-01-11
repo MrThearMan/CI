@@ -6,11 +6,11 @@ on:
       python-version:
         required: false
         type: string
-        default: "3.12"
+        default: "3.13"
       poetry-version:
         required: false
         type: string
-        default: "1.8.3"
+        default: "2.0.0"
       os:
         required: false
         type: string
@@ -45,7 +45,7 @@ jobs:
         with:
           python-version: ${{ inputs.python-version }}
 
-      - uses: MrThearMan/CI/.github/actions/poetry@v0.4.12
+      - uses: MrThearMan/CI/.github/actions/poetry@v0.4.13
         with:
           os: ${{ inputs.os }}
           poetry-version: ${{ inputs.poetry-version }}
