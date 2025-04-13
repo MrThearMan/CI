@@ -1,0 +1,111 @@
+name: Test
+
+on:
+  workflow_call:
+    inputs:
+      python-version:
+        required: false
+        type: string
+        default: '["3.10", "3.11", "3.12", "3.13"]'
+      os:
+        required: false
+        type: string
+        default: '["ubuntu-latest", "macos-latest", "windows-latest"]'
+      poetry-version:
+        required: false
+        type: string
+        default: "2.0.0"
+      exclude:
+        required: false
+        type: string
+        default: '[{"os": "none", "python-version": "none"}]'
+      submodules:
+        required: false
+        type: boolean
+        default: false
+      fetch-depth:
+        required: false
+        type: number
+        default: 1
+      coveralls:
+        required: false
+        type: boolean
+        default: true
+
+jobs:
+  test:
+    name: ${{ matrix.python-version }}-${{ matrix.os }}
+    runs-on: ${{ matrix.os }}
+
+    # Cancel old workflows when a new workflow is triggered for the same PR/branch/tag & python version & OS.
+    concurrency:
+      group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}-${{ matrix.python-version }}-${{ matrix.os }}
+      cancel-in-progress: true
+
+    strategy:
+      matrix:
+        os: ${{ fromJSON(inputs.os) }}
+        python-version: ${{ fromJSON(inputs.python-version) }}
+        exclude: ${{ fromJSON(inputs.exclude) }}
+
+    defaults:
+      run:
+        shell: bash
+
+    steps:
+      - name: "Check out repository"
+        uses: actions/checkout@v4
+        with:
+          submodules: ${{ inputs.submodules }}
+          fetch-depth: ${{ inputs.fetch-depth }}
+
+      - name: "Set up python"
+        id: setup-python
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+
+      - uses: MrThearMan/CI/.github/actions/poetry@v0.4.13
+        with:
+          os: ${{ matrix.os }}
+          poetry-version: ${{ inputs.poetry-version }}
+          python-version: ${{ steps.setup-python.outputs.python-version }}
+
+      - name: "Install nox"
+        run: pip install nox
+
+      - name: "Load cached nox environment"
+        uses: actions/cache@v4
+        id: nox-cache
+        with:
+          path: .nox
+          key: cache-v1-nox-python${{ steps.setup-python.outputs.python-version }}-${{ matrix.os }}-${{ hashFiles('**/poetry.lock') }}
+
+      - name: "Pre-test hook"
+        if: ${{ hashFiles('.github/actions/pre-test/action.yml') != '' }}
+        uses: ./.github/actions/pre-test
+
+      - name: "Run tests with nox"
+        run: nox --session tests --python ${{ matrix.python-version }}
+
+      - name: "Post-test hook"
+        if: ${{ hashFiles('.github/actions/post-test/action.yml') != '' }}
+        uses: ./.github/actions/post-test
+
+      - name: "Submit coverage"
+        if: ${{ inputs.coveralls }}
+        uses: coverallsapp/github-action@v2
+        with:
+          file: coverage.xml
+          flag-name: ${{ steps.setup-python.outputs.python-version }}-${{ matrix.os }}
+          parallel: true
+
+  submit-coverage:
+    needs: test
+    runs-on: "ubuntu-latest"
+    if: ${{ inputs.coveralls }}
+    steps:
+      - name: "Finnish coverage report"
+        uses: coverallsapp/github-action@v2
+        with:
+          parallel-finished: true
