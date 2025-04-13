@@ -7,7 +7,7 @@ inputs:
     default: "ubuntu-latest"
   poetry-version:
     description: "Poetry version to use."
-    default: "2.0.0"
+    default: "2.1.2"
   python-version:
     description: "Python version to use."
     default: "unknown"
