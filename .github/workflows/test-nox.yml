@@ -74,6 +74,10 @@ jobs:
       - name: "Install nox"
         run: pip install nox
 
+      - name: "Install coverage"
+        if: ${{ inputs.coveralls }}
+        run: pip install coverage
+
       - name: "Load cached nox environment"
         uses: actions/cache@v4
         id: nox-cache
@@ -87,6 +91,12 @@ jobs:
 
       - name: "Run tests with nox"
         run: nox --session tests --python ${{ matrix.python-version }}
+
+      - name: "Make coverage report"
+        if: ${{ inputs.coveralls }}
+        run: |
+          coverage report
+          coverage xml
 
       - name: "Post-test hook"
         if: ${{ hashFiles('.github/actions/post-test/action.yml') != '' }}
