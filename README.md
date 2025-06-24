@@ -78,7 +78,7 @@ on:
 
 jobs:
   test:
-    uses: MrThearMan/CI/.github/workflows/test.yml@v0.4.15
+    uses: MrThearMan/CI/.github/workflows/test.yml@v0.4.16
 ```
 
 `workflows/test.yml` uses [tox](https://tox.wiki/en/latest/) to run the tests.
@@ -146,7 +146,7 @@ Default configuration:
 ```yaml
 jobs:
   test:
-    uses: MrThearMan/CI/.github/workflows/test.yml@v0.4.15
+    uses: MrThearMan/CI/.github/workflows/test.yml@v0.4.16
     with:
       python-version: '["3.10", "3.11", "3.12", "3.13"]'
 ```
@@ -162,7 +162,7 @@ Default configuration:
 ```yaml
 jobs:
   test:
-    uses: MrThearMan/CI/.github/workflows/test.yml@v0.4.15
+    uses: MrThearMan/CI/.github/workflows/test.yml@v0.4.16
     with:
       os: '["ubuntu-latest", "macos-latest", "windows-latest"]'
 ```
@@ -178,7 +178,7 @@ Default configuration:
 ```yaml
 jobs:
   test:
-    uses: MrThearMan/CI/.github/workflows/test.yml@v0.4.15
+    uses: MrThearMan/CI/.github/workflows/test.yml@v0.4.16
     with:
       env: '{"FOO": "bar"}'
 ```
@@ -194,7 +194,7 @@ Default configuration:
 ```yaml
 jobs:
   test:
-    uses: MrThearMan/CI/.github/workflows/test.yml@v0.4.15
+    uses: MrThearMan/CI/.github/workflows/test.yml@v0.4.16
     with:
       poetry-version: "2.0.0"
 ```
@@ -212,7 +212,7 @@ Default configuration:
 ```yaml
 jobs:
   test:
-    uses: MrThearMan/CI/.github/workflows/test.yml@v0.4.15
+    uses: MrThearMan/CI/.github/workflows/test.yml@v0.4.16
     with:
       exclude: '[{"os": "none", "python-version": "none"}]'  # this ignores nothing
 ```
@@ -228,7 +228,7 @@ Default configuration:
 ```yaml
 jobs:
   test:
-    uses: MrThearMan/CI/.github/workflows/test.yml@v0.4.15
+    uses: MrThearMan/CI/.github/workflows/test.yml@v0.4.16
     with:
       submodules: false
 ```
@@ -245,7 +245,7 @@ Default configuration:
 ```yaml
 jobs:
   test:
-    uses: MrThearMan/CI/.github/workflows/test.yml@v0.4.15
+    uses: MrThearMan/CI/.github/workflows/test.yml@v0.4.16
     with:
       fetch-depth: 1
 ```
@@ -262,7 +262,7 @@ Default configuration:
 ```yaml
 jobs:
   test:
-    uses: MrThearMan/CI/.github/workflows/test.yml@v0.4.15
+    uses: MrThearMan/CI/.github/workflows/test.yml@v0.4.16
     with:
       coveralls: true
 ```
@@ -301,7 +301,7 @@ on:
 
 jobs:
   test:
-    uses: MrThearMan/CI/.github/workflows/docs.yml@v0.4.15
+    uses: MrThearMan/CI/.github/workflows/docs.yml@v0.4.16
 ```
 
 This job can take a number of inputs via the [with]-keyword.
@@ -317,7 +317,7 @@ Default configuration:
 ```yaml
 jobs:
   test:
-    uses: MrThearMan/CI/.github/workflows/docs.yml@v0.4.15
+    uses: MrThearMan/CI/.github/workflows/docs.yml@v0.4.16
     with:
       poetry-version: "2.0.0"
 ```
@@ -333,7 +333,7 @@ Default configuration:
 ```yaml
 jobs:
   test:
-    uses: MrThearMan/CI/.github/workflows/docs.yml@v0.4.15
+    uses: MrThearMan/CI/.github/workflows/docs.yml@v0.4.16
     with:
       python-version: "3.13"
 ```
@@ -349,7 +349,7 @@ Default configuration:
 ```yaml
 jobs:
   test:
-    uses: MrThearMan/CI/.github/workflows/docs.yml@v0.4.15
+    uses: MrThearMan/CI/.github/workflows/docs.yml@v0.4.16
     with:
       os: "ubuntu-latest"
 ```
@@ -365,7 +365,7 @@ Default configuration:
 ```yaml
 jobs:
   test:
-    uses: MrThearMan/CI/.github/workflows/docs.yml@v0.4.15
+    uses: MrThearMan/CI/.github/workflows/docs.yml@v0.4.16
     with:
       env: '{"FOO": "bar"}'
 ```
@@ -381,7 +381,7 @@ Default configuration:
 ```yaml
 jobs:
   test:
-    uses: MrThearMan/CI/.github/workflows/test.yml@v0.4.15
+    uses: MrThearMan/CI/.github/workflows/test.yml@v0.4.16
     with:
       submodules: false
 ```
@@ -398,7 +398,7 @@ Default configuration:
 ```yaml
 jobs:
   test:
-    uses: MrThearMan/CI/.github/workflows/test.yml@v0.4.15
+    uses: MrThearMan/CI/.github/workflows/test.yml@v0.4.16
     with:
       fetch-depth: 1
 ```
@@ -427,7 +427,7 @@ on:
 
 jobs:
   test:
-    uses: MrThearMan/CI/.github/workflows/release.yml@v0.4.15
+    uses: MrThearMan/CI/.github/workflows/release.yml@v0.4.16
     secrets:
       pypi-token: ${{ secrets.PYPI_API_TOKEN }}
 ```
@@ -447,7 +447,7 @@ Default configuration:
 ```yaml
 jobs:
   test:
-    uses: MrThearMan/CI/.github/workflows/release.yml@v0.4.15
+    uses: MrThearMan/CI/.github/workflows/release.yml@v0.4.16
     with:
       poetry-version: "2.0.0"
 ```
@@ -463,7 +463,7 @@ Default configuration:
 ```yaml
 jobs:
   test:
-    uses: MrThearMan/CI/.github/workflows/release.yml@v0.4.15
+    uses: MrThearMan/CI/.github/workflows/release.yml@v0.4.16
     with:
       python-version: "3.13"
 ```
@@ -479,7 +479,7 @@ Default configuration:
 ```yaml
 jobs:
   test:
-    uses: MrThearMan/CI/.github/workflows/release.yml@v0.4.15
+    uses: MrThearMan/CI/.github/workflows/release.yml@v0.4.16
     with:
       os: "ubuntu-latest"
 ```
@@ -495,7 +495,7 @@ Default configuration:
 ```yaml
 jobs:
   test:
-    uses: MrThearMan/CI/.github/workflows/release.yml@v0.4.15
+    uses: MrThearMan/CI/.github/workflows/release.yml@v0.4.16
     with:
       env: '{"FOO": "bar"}'
 ```
@@ -511,7 +511,7 @@ Default configuration:
 ```yaml
 jobs:
   test:
-    uses: MrThearMan/CI/.github/workflows/test.yml@v0.4.15
+    uses: MrThearMan/CI/.github/workflows/test.yml@v0.4.16
     with:
       submodules: false
 ```
@@ -528,7 +528,7 @@ Default configuration:
 ```yaml
 jobs:
   test:
-    uses: MrThearMan/CI/.github/workflows/test.yml@v0.4.15
+    uses: MrThearMan/CI/.github/workflows/test.yml@v0.4.16
     with:
       fetch-depth: 1
 ```
@@ -555,7 +555,7 @@ jobs:
     permissions:
       pull-requests: write
       contents: write
-    uses: MrThearMan/CI/.github/workflows/approve.yml@v0.4.15
+    uses: MrThearMan/CI/.github/workflows/approve.yml@v0.4.16
 ```
 
 This job can take a number of inputs via the [with]-keyword.
@@ -571,7 +571,7 @@ Default configuration:
 ```yaml
 jobs:
   approve:
-    uses: MrThearMan/CI/.github/workflows/approve.yml@v0.4.15
+    uses: MrThearMan/CI/.github/workflows/approve.yml@v0.4.16
     with:
       users: '["dependabot[bot]", "pre-commit-ci[bot]"]'
 ```
@@ -587,7 +587,7 @@ Default configuration:
 ```yaml
 jobs:
   test:
-    uses: MrThearMan/CI/.github/workflows/test.yml@v0.4.15
+    uses: MrThearMan/CI/.github/workflows/test.yml@v0.4.16
     with:
       submodules: false
 ```
@@ -604,7 +604,7 @@ Default configuration:
 ```yaml
 jobs:
   test:
-    uses: MrThearMan/CI/.github/workflows/test.yml@v0.4.15
+    uses: MrThearMan/CI/.github/workflows/test.yml@v0.4.16
     with:
       fetch-depth: 1
 ```
@@ -661,7 +661,7 @@ jobs:
   <foo>:
     steps:
       - ...
-      - uses: MrThearMan/CI/.github/actions/poetry@v0.4.15
+      - uses: MrThearMan/CI/.github/actions/poetry@v0.4.16
         with:
           os: "ubuntu-latest"
           poetry-version: "2.0.0"
@@ -692,7 +692,7 @@ Can be used to check if certain filetypes were changed in a pull request.
 jobs:
   <foo>:
     steps:
-      - uses: MrThearMan/CI/.github/actions/get-changed-filetypes@v0.4.15
+      - uses: MrThearMan/CI/.github/actions/get-changed-filetypes@v0.4.16
         id: changed
         with:
           filetypes: "py|yaml"
