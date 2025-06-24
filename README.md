@@ -169,6 +169,22 @@ jobs:
 
 ---
 
+#### `env`
+
+Environment variables to set in the pipeline.
+
+Default configuration:
+
+```yaml
+jobs:
+  test:
+    uses: MrThearMan/CI/.github/workflows/test.yml@v0.4.15
+    with:
+      env: '{"FOO": "bar"}'
+```
+
+---
+
 #### `poetry-version`
 
 Configure the poetry version used in the pipeline.
@@ -340,6 +356,22 @@ jobs:
 
 ---
 
+#### `env`
+
+Environment variables to set in the pipeline.
+
+Default configuration:
+
+```yaml
+jobs:
+  test:
+    uses: MrThearMan/CI/.github/workflows/docs.yml@v0.4.15
+    with:
+      env: '{"FOO": "bar"}'
+```
+
+---
+
 #### `submodules`
 
 Should submodules be checked out with the repository?
@@ -450,6 +482,22 @@ jobs:
     uses: MrThearMan/CI/.github/workflows/release.yml@v0.4.15
     with:
       os: "ubuntu-latest"
+```
+
+---
+
+#### `env`
+
+Environment variables to set in the pipeline.
+
+Default configuration:
+
+```yaml
+jobs:
+  test:
+    uses: MrThearMan/CI/.github/workflows/release.yml@v0.4.15
+    with:
+      env: '{"FOO": "bar"}'
 ```
 
 ---

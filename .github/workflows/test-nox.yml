@@ -11,6 +11,10 @@ on:
         required: false
         type: string
         default: '["ubuntu-latest", "macos-latest", "windows-latest"]'
+      env:
+        required: false
+        type: string
+        default: '{}'
       poetry-version:
         required: false
         type: string
@@ -36,6 +40,7 @@ jobs:
   test:
     name: ${{ matrix.python-version }}-${{ matrix.os }}
     runs-on: ${{ matrix.os }}
+    env: ${{ fromJSON(inputs.env) }}
 
     # Cancel old workflows when a new workflow is triggered for the same PR/branch/tag & python version & OS.
     concurrency:
@@ -113,6 +118,7 @@ jobs:
   submit-coverage:
     needs: test
     runs-on: "ubuntu-latest"
+    env: ${{ fromJSON(inputs.env) }}
     if: ${{ inputs.coveralls }}
     steps:
       - name: "Finnish coverage report"

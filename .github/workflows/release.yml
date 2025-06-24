@@ -15,6 +15,10 @@ on:
         required: false
         type: string
         default: "ubuntu-latest"
+      env:
+        required: false
+        type: string
+        default: '{}'
       submodules:
         required: false
         type: boolean
@@ -30,6 +34,7 @@ on:
 jobs:
   publish:
     runs-on: ${{ inputs.os }}
+    env: ${{ fromJSON(inputs.env) }}
 
     defaults:
       run:
