@@ -42,9 +42,9 @@ jobs:
     runs-on: ${{ matrix.os }}
     env: ${{ fromJSON(inputs.env) }}
 
-    # Cancel old workflows when a new workflow is triggered for the same PR/branch/tag & python version & OS.
+    # Cancel old workflows when a new workflow is triggered for the same PR/branch/tag & python version & OS & environment.
     concurrency:
-      group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}-${{ matrix.python-version }}-${{ matrix.os }}
+      group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}-${{ matrix.python-version }}-${{ matrix.os }}-${{ inputs.env }}
       cancel-in-progress: true
 
     strategy:
