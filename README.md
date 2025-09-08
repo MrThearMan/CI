@@ -15,7 +15,7 @@ The docs building pipeline requires [mkdocs].
 
 ## How to use
 
-Here is a minimal `pyproject.toml` setup to get started:
+Here is the required configuration for your `pyproject.toml`:
 
 ```toml
 # ...
@@ -23,13 +23,6 @@ Here is a minimal `pyproject.toml` setup to get started:
 [tool.poetry.group.test.dependencies]
 pytest = "..."  # use latest version
 coverage = "..."  # use latest version
-# 'distutils' is not included in virtual environments from Python 3.12 onwards,
-# so you might need to explcitly include it via setuptools.
-setuptools = {version = "...", python = ">=3.12"}  # use latest version
-# If using tox
-tox = "..."  # use latest version
-tox-gh-actions = "..."  # use latest version
-# If using nox
 nox = "..."  # use latest version
 
 # This is only needed for the docs CI
@@ -39,14 +32,8 @@ mkdocs = "..."  # use latest version
 [tool.coverage.run]
 relative_files = true
 
-[tool.coverage.report]
-omit = [
-    "tests/*",
-    ".tox/*",
-]
-
 [build-system]
-requires = ["poetry-core>=1.9.0"]
+requires = ["poetry-core>=2.0.0"]
 build-backend = "poetry.core.masonry.api"
 ```
 
@@ -78,39 +65,12 @@ on:
 
 jobs:
   test:
-    uses: MrThearMan/CI/.github/workflows/test.yml@v0.4.16
+    uses: MrThearMan/CI/.github/workflows/test-nox.yml@v0.4.16
 ```
 
-`workflows/test.yml` uses [tox](https://tox.wiki/en/latest/) to run the tests.
-Toc can be configured in `pyproject.toml` with the `legacy_tox_ini` setting.
-
-```toml
-[tool.tox]
-legacy_tox_ini = """
-[tox]
-envlist = py{310, 311, 312, 313}
-isolated_build = true
-
-[gh-actions]
-python =
-    3.10: py310
-    3.11: py311
-    3.12: py312
-    3.13: py313
-
-[testenv]
-allowlist_externals =
-    poetry
-setenv =
-    PYTHONPATH = {toxinidir}
-commands =
-    poetry install
-    poetry run coverage run -m pytest {posargs}
-"""
-```
-
-If you want to use [nox](https://nox.thea.codes/en/stable/) instead, you can
-use the `workflows/test-nox.yml` workflow with the following nox session.
+Test pipelines use [nox](https://nox.thea.codes/en/stable/) to run the tests.
+You'll need to add a `noxfile.py` to the root of your project with the following
+content:
 
 ```python
 from pathlib import Path
@@ -118,17 +78,15 @@ from pathlib import Path
 import nox
 
 
-@nox.session(python=["3.10", "3.11", "3.12", "3.13"])
+@nox.session(python=["3.10", "3.11", "3.12", "3.13"], reuse_venv=True)
 def tests(session: nox.Session) -> None:
     env = {
         "POETRY_VIRTUALENVS_PATH": str(Path(session.virtualenv.bin).parent),
     }
 
-    session.run_install("poetry", "install", external=True, env=env)
+    session.run_install("poetry", "install", "--all-extras", external=True, env=env)
 
     session.run("coverage", "run", "-m", "pytest", external="error")
-    session.run("coverage", "report")
-    session.run("coverage", "xml")
 ```
 
 This job can take a number of inputs via the [with]-keyword.
@@ -146,7 +104,7 @@ Default configuration:
 ```yaml
 jobs:
   test:
-    uses: MrThearMan/CI/.github/workflows/test.yml@v0.4.16
+    uses: MrThearMan/CI/.github/workflows/test-nox.yml@v0.4.16
     with:
       python-version: '["3.10", "3.11", "3.12", "3.13"]'
 ```
@@ -162,7 +120,7 @@ Default configuration:
 ```yaml
 jobs:
   test:
-    uses: MrThearMan/CI/.github/workflows/test.yml@v0.4.16
+    uses: MrThearMan/CI/.github/workflows/test-nox.yml@v0.4.16
     with:
       os: '["ubuntu-latest", "macos-latest", "windows-latest"]'
 ```
@@ -178,7 +136,7 @@ Default configuration:
 ```yaml
 jobs:
   test:
-    uses: MrThearMan/CI/.github/workflows/test.yml@v0.4.16
+    uses: MrThearMan/CI/.github/workflows/test-nox.yml@v0.4.16
     with:
       env: '{"FOO": "bar"}'
 ```
@@ -194,7 +152,7 @@ Default configuration:
 ```yaml
 jobs:
   test:
-    uses: MrThearMan/CI/.github/workflows/test.yml@v0.4.16
+    uses: MrThearMan/CI/.github/workflows/test-nox.yml@v0.4.16
     with:
       poetry-version: "2.0.0"
 ```
@@ -212,7 +170,7 @@ Default configuration:
 ```yaml
 jobs:
   test:
-    uses: MrThearMan/CI/.github/workflows/test.yml@v0.4.16
+    uses: MrThearMan/CI/.github/workflows/test-nox.yml@v0.4.16
     with:
       exclude: '[{"os": "none", "python-version": "none"}]'  # this ignores nothing
 ```
@@ -228,7 +186,7 @@ Default configuration:
 ```yaml
 jobs:
   test:
-    uses: MrThearMan/CI/.github/workflows/test.yml@v0.4.16
+    uses: MrThearMan/CI/.github/workflows/test-nox.yml@v0.4.16
     with:
       submodules: false
 ```
@@ -245,7 +203,7 @@ Default configuration:
 ```yaml
 jobs:
   test:
-    uses: MrThearMan/CI/.github/workflows/test.yml@v0.4.16
+    uses: MrThearMan/CI/.github/workflows/test-nox.yml@v0.4.16
     with:
       fetch-depth: 1
 ```
@@ -262,9 +220,26 @@ Default configuration:
 ```yaml
 jobs:
   test:
-    uses: MrThearMan/CI/.github/workflows/test.yml@v0.4.16
+    uses: MrThearMan/CI/.github/workflows/test-nox.yml@v0.4.16
     with:
       coveralls: true
+```
+
+---
+
+#### `coveralls-os`
+
+Which operating system should be covered using [coveralls]?
+Should be one of the operating systems configured with `os`.
+
+Default configuration:
+
+```yaml
+jobs:
+  test:
+    uses: MrThearMan/CI/.github/workflows/test-nox.yml@v0.4.16
+    with:
+      coveralls-os: "ubuntu-latest"
 ```
 
 ---
@@ -381,7 +356,7 @@ Default configuration:
 ```yaml
 jobs:
   test:
-    uses: MrThearMan/CI/.github/workflows/test.yml@v0.4.16
+    uses: MrThearMan/CI/.github/workflows/test-nox.yml@v0.4.16
     with:
       submodules: false
 ```
@@ -398,7 +373,7 @@ Default configuration:
 ```yaml
 jobs:
   test:
-    uses: MrThearMan/CI/.github/workflows/test.yml@v0.4.16
+    uses: MrThearMan/CI/.github/workflows/test-nox.yml@v0.4.16
     with:
       fetch-depth: 1
 ```
@@ -511,7 +486,7 @@ Default configuration:
 ```yaml
 jobs:
   test:
-    uses: MrThearMan/CI/.github/workflows/test.yml@v0.4.16
+    uses: MrThearMan/CI/.github/workflows/test-nox.yml@v0.4.16
     with:
       submodules: false
 ```
@@ -528,7 +503,7 @@ Default configuration:
 ```yaml
 jobs:
   test:
-    uses: MrThearMan/CI/.github/workflows/test.yml@v0.4.16
+    uses: MrThearMan/CI/.github/workflows/test-nox.yml@v0.4.16
     with:
       fetch-depth: 1
 ```
@@ -587,7 +562,7 @@ Default configuration:
 ```yaml
 jobs:
   test:
-    uses: MrThearMan/CI/.github/workflows/test.yml@v0.4.16
+    uses: MrThearMan/CI/.github/workflows/test-nox.yml@v0.4.16
     with:
       submodules: false
 ```
@@ -604,7 +579,7 @@ Default configuration:
 ```yaml
 jobs:
   test:
-    uses: MrThearMan/CI/.github/workflows/test.yml@v0.4.16
+    uses: MrThearMan/CI/.github/workflows/test-nox.yml@v0.4.16
     with:
       fetch-depth: 1
 ```

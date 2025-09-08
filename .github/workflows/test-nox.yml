@@ -35,6 +35,10 @@ on:
         required: false
         type: boolean
         default: true
+      coveralls-os:
+        required: false
+        type: string
+        default: "ubuntu-latest"
 
 jobs:
   test:
@@ -80,7 +84,7 @@ jobs:
         run: pip install nox
 
       - name: "Install coverage"
-        if: ${{ inputs.coveralls }}
+        if: ${{ inputs.coveralls && inputs.coveralls-os == matrix.os }}
         run: pip install coverage
 
       - name: "Load cached nox environment"
@@ -98,7 +102,7 @@ jobs:
         run: nox --session tests --python ${{ matrix.python-version }}
 
       - name: "Make coverage report"
-        if: ${{ inputs.coveralls }}
+        if: ${{ inputs.coveralls && inputs.coveralls-os == matrix.os }}
         run: |
           coverage report
           coverage xml
@@ -108,7 +112,7 @@ jobs:
         uses: ./.github/actions/post-test
 
       - name: "Submit coverage"
-        if: ${{ inputs.coveralls }}
+        if: ${{ inputs.coveralls && inputs.coveralls-os == matrix.os }}
         uses: coverallsapp/github-action@v2
         with:
           file: coverage.xml
@@ -117,7 +121,7 @@ jobs:
 
   submit-coverage:
     needs: test
-    runs-on: "ubuntu-latest"
+    runs-on: ${{ inputs.coveralls-os }}
     env: ${{ fromJSON(inputs.env) }}
     if: ${{ inputs.coveralls }}
     steps:
