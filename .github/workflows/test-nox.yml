@@ -74,7 +74,7 @@ jobs:
         with:
           python-version: ${{ matrix.python-version }}
 
-      - uses: MrThearMan/CI/.github/actions/poetry@v0.5.0
+      - uses: MrThearMan/CI/.github/actions/poetry@v0.5.1
         with:
           os: ${{ matrix.os }}
           poetry-version: ${{ inputs.poetry-version }}
