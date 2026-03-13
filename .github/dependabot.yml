@@ -1,0 +1,16 @@
+# Setup dependabot updates
+
+version: 2
+
+updates:
+  # Update GitHub Actions
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+    pull-request-branch-name:
+      separator: "-"
+    groups:
+      github-actions-dependencies:
+        patterns:
+          - "*"

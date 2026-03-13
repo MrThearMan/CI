@@ -6,11 +6,11 @@ on:
       python-version:
         required: false
         type: string
-        default: "3.13"
+        default: "3.14"
       poetry-version:
         required: false
         type: string
-        default: "2.1.4"
+        default: "2.3.2"
       os:
         required: false
         type: string
@@ -39,25 +39,25 @@ jobs:
 
     steps:
       - name: "Check out repository"
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
         with:
           submodules: ${{ inputs.submodules }}
           fetch-depth: ${{ inputs.fetch-depth }}
 
       - name: "Set up python"
         id: setup-python
-        uses: actions/setup-python@v5
+        uses: actions/setup-python@v6
         with:
           python-version: ${{ inputs.python-version }}
 
-      - uses: MrThearMan/CI/.github/actions/poetry@v0.5.1
+      - uses: MrThearMan/CI/.github/actions/poetry@v0.5.2
         with:
           os: ${{ inputs.os }}
           poetry-version: ${{ inputs.poetry-version }}
           python-version: ${{ steps.setup-python.outputs.python-version }}
 
       - name: "Load cached poetry environment"
-        uses: actions/cache@v4
+        uses: actions/cache@v5
         with:
           path: .venv
           key: cache-v1-docs-python${{ steps.setup-python.outputs.python-version }}-${{ inputs.os }}

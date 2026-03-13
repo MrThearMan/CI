@@ -65,7 +65,7 @@ on:
 
 jobs:
   test:
-    uses: MrThearMan/CI/.github/workflows/test-nox.yml@v0.5.1
+    uses: MrThearMan/CI/.github/workflows/test-nox.yml@v0.5.2
 ```
 
 Test pipelines use [nox](https://nox.thea.codes/en/stable/) to run the tests.
@@ -80,12 +80,8 @@ import nox
 
 @nox.session(python=["3.10", "3.11", "3.12", "3.13"], reuse_venv=True)
 def tests(session: nox.Session) -> None:
-    env = {
-        "POETRY_VIRTUALENVS_PATH": str(Path(session.virtualenv.bin).parent),
-    }
-
-    session.run_install("poetry", "install", "--all-extras", external=True, env=env)
-
+    env = {"POETRY_VIRTUALENVS_PATH": str(Path(session.virtualenv.bin).parent)}
+    session.run_install("poetry", "install", "--all-extras", "--all-groups", external=True, env=env)
     session.run("coverage", "run", "-m", "pytest", external="error")
 ```
 
@@ -104,9 +100,9 @@ Default configuration:
 ```yaml
 jobs:
   test:
-    uses: MrThearMan/CI/.github/workflows/test-nox.yml@v0.5.1
+    uses: MrThearMan/CI/.github/workflows/test-nox.yml@v0.5.2
     with:
-      python-version: '["3.10", "3.11", "3.12", "3.13"]'
+      python-version: '["3.11", "3.12", "3.13", "3.14"]'
 ```
 
 ---
@@ -120,7 +116,7 @@ Default configuration:
 ```yaml
 jobs:
   test:
-    uses: MrThearMan/CI/.github/workflows/test-nox.yml@v0.5.1
+    uses: MrThearMan/CI/.github/workflows/test-nox.yml@v0.5.2
     with:
       os: '["ubuntu-latest", "macos-latest", "windows-latest"]'
 ```
@@ -136,7 +132,7 @@ Default configuration:
 ```yaml
 jobs:
   test:
-    uses: MrThearMan/CI/.github/workflows/test-nox.yml@v0.5.1
+    uses: MrThearMan/CI/.github/workflows/test-nox.yml@v0.5.2
     with:
       env: '{"FOO": "bar"}'
 ```
@@ -152,9 +148,9 @@ Default configuration:
 ```yaml
 jobs:
   test:
-    uses: MrThearMan/CI/.github/workflows/test-nox.yml@v0.5.1
+    uses: MrThearMan/CI/.github/workflows/test-nox.yml@v0.5.2
     with:
-      poetry-version: "2.0.0"
+      poetry-version: "2.3.2"
 ```
 
 ---
@@ -170,7 +166,7 @@ Default configuration:
 ```yaml
 jobs:
   test:
-    uses: MrThearMan/CI/.github/workflows/test-nox.yml@v0.5.1
+    uses: MrThearMan/CI/.github/workflows/test-nox.yml@v0.5.2
     with:
       exclude: '[{"os": "none", "python-version": "none"}]'  # this ignores nothing
 ```
@@ -186,7 +182,7 @@ Default configuration:
 ```yaml
 jobs:
   test:
-    uses: MrThearMan/CI/.github/workflows/test-nox.yml@v0.5.1
+    uses: MrThearMan/CI/.github/workflows/test-nox.yml@v0.5.2
     with:
       submodules: false
 ```
@@ -203,7 +199,7 @@ Default configuration:
 ```yaml
 jobs:
   test:
-    uses: MrThearMan/CI/.github/workflows/test-nox.yml@v0.5.1
+    uses: MrThearMan/CI/.github/workflows/test-nox.yml@v0.5.2
     with:
       fetch-depth: 1
 ```
@@ -220,7 +216,7 @@ Default configuration:
 ```yaml
 jobs:
   test:
-    uses: MrThearMan/CI/.github/workflows/test-nox.yml@v0.5.1
+    uses: MrThearMan/CI/.github/workflows/test-nox.yml@v0.5.2
     with:
       coveralls: true
 ```
@@ -237,7 +233,7 @@ Default configuration:
 ```yaml
 jobs:
   test:
-    uses: MrThearMan/CI/.github/workflows/test-nox.yml@v0.5.1
+    uses: MrThearMan/CI/.github/workflows/test-nox.yml@v0.5.2
     with:
       coveralls-os: "ubuntu-latest"
 ```
@@ -276,7 +272,7 @@ on:
 
 jobs:
   test:
-    uses: MrThearMan/CI/.github/workflows/docs.yml@v0.5.1
+    uses: MrThearMan/CI/.github/workflows/docs.yml@v0.5.2
 ```
 
 This job can take a number of inputs via the [with]-keyword.
@@ -292,9 +288,9 @@ Default configuration:
 ```yaml
 jobs:
   test:
-    uses: MrThearMan/CI/.github/workflows/docs.yml@v0.5.1
+    uses: MrThearMan/CI/.github/workflows/docs.yml@v0.5.2
     with:
-      poetry-version: "2.0.0"
+      poetry-version: "2.3.2"
 ```
 
 ---
@@ -308,9 +304,9 @@ Default configuration:
 ```yaml
 jobs:
   test:
-    uses: MrThearMan/CI/.github/workflows/docs.yml@v0.5.1
+    uses: MrThearMan/CI/.github/workflows/docs.yml@v0.5.2
     with:
-      python-version: "3.13"
+      python-version: "3.14"
 ```
 
 ---
@@ -324,7 +320,7 @@ Default configuration:
 ```yaml
 jobs:
   test:
-    uses: MrThearMan/CI/.github/workflows/docs.yml@v0.5.1
+    uses: MrThearMan/CI/.github/workflows/docs.yml@v0.5.2
     with:
       os: "ubuntu-latest"
 ```
@@ -340,7 +336,7 @@ Default configuration:
 ```yaml
 jobs:
   test:
-    uses: MrThearMan/CI/.github/workflows/docs.yml@v0.5.1
+    uses: MrThearMan/CI/.github/workflows/docs.yml@v0.5.2
     with:
       env: '{"FOO": "bar"}'
 ```
@@ -356,7 +352,7 @@ Default configuration:
 ```yaml
 jobs:
   test:
-    uses: MrThearMan/CI/.github/workflows/test-nox.yml@v0.5.1
+    uses: MrThearMan/CI/.github/workflows/test-nox.yml@v0.5.2
     with:
       submodules: false
 ```
@@ -373,7 +369,7 @@ Default configuration:
 ```yaml
 jobs:
   test:
-    uses: MrThearMan/CI/.github/workflows/test-nox.yml@v0.5.1
+    uses: MrThearMan/CI/.github/workflows/test-nox.yml@v0.5.2
     with:
       fetch-depth: 1
 ```
@@ -402,7 +398,7 @@ on:
 
 jobs:
   test:
-    uses: MrThearMan/CI/.github/workflows/release.yml@v0.5.1
+    uses: MrThearMan/CI/.github/workflows/release.yml@v0.5.2
     secrets:
       pypi-token: ${{ secrets.PYPI_API_TOKEN }}
 ```
@@ -422,9 +418,9 @@ Default configuration:
 ```yaml
 jobs:
   test:
-    uses: MrThearMan/CI/.github/workflows/release.yml@v0.5.1
+    uses: MrThearMan/CI/.github/workflows/release.yml@v0.5.2
     with:
-      poetry-version: "2.0.0"
+      poetry-version: "2.3.2"
 ```
 
 ---
@@ -438,9 +434,9 @@ Default configuration:
 ```yaml
 jobs:
   test:
-    uses: MrThearMan/CI/.github/workflows/release.yml@v0.5.1
+    uses: MrThearMan/CI/.github/workflows/release.yml@v0.5.2
     with:
-      python-version: "3.13"
+      python-version: "3.14"
 ```
 
 ---
@@ -454,7 +450,7 @@ Default configuration:
 ```yaml
 jobs:
   test:
-    uses: MrThearMan/CI/.github/workflows/release.yml@v0.5.1
+    uses: MrThearMan/CI/.github/workflows/release.yml@v0.5.2
     with:
       os: "ubuntu-latest"
 ```
@@ -470,7 +466,7 @@ Default configuration:
 ```yaml
 jobs:
   test:
-    uses: MrThearMan/CI/.github/workflows/release.yml@v0.5.1
+    uses: MrThearMan/CI/.github/workflows/release.yml@v0.5.2
     with:
       env: '{"FOO": "bar"}'
 ```
@@ -486,7 +482,7 @@ Default configuration:
 ```yaml
 jobs:
   test:
-    uses: MrThearMan/CI/.github/workflows/test-nox.yml@v0.5.1
+    uses: MrThearMan/CI/.github/workflows/test-nox.yml@v0.5.2
     with:
       submodules: false
 ```
@@ -503,7 +499,7 @@ Default configuration:
 ```yaml
 jobs:
   test:
-    uses: MrThearMan/CI/.github/workflows/test-nox.yml@v0.5.1
+    uses: MrThearMan/CI/.github/workflows/test-nox.yml@v0.5.2
     with:
       fetch-depth: 1
 ```
@@ -530,7 +526,7 @@ jobs:
     permissions:
       pull-requests: write
       contents: write
-    uses: MrThearMan/CI/.github/workflows/approve.yml@v0.5.1
+    uses: MrThearMan/CI/.github/workflows/approve.yml@v0.5.2
 ```
 
 This job can take a number of inputs via the [with]-keyword.
@@ -546,7 +542,7 @@ Default configuration:
 ```yaml
 jobs:
   approve:
-    uses: MrThearMan/CI/.github/workflows/approve.yml@v0.5.1
+    uses: MrThearMan/CI/.github/workflows/approve.yml@v0.5.2
     with:
       users: '["dependabot[bot]", "pre-commit-ci[bot]"]'
 ```
@@ -562,7 +558,7 @@ Default configuration:
 ```yaml
 jobs:
   test:
-    uses: MrThearMan/CI/.github/workflows/test-nox.yml@v0.5.1
+    uses: MrThearMan/CI/.github/workflows/test-nox.yml@v0.5.2
     with:
       submodules: false
 ```
@@ -579,7 +575,7 @@ Default configuration:
 ```yaml
 jobs:
   test:
-    uses: MrThearMan/CI/.github/workflows/test-nox.yml@v0.5.1
+    uses: MrThearMan/CI/.github/workflows/test-nox.yml@v0.5.2
     with:
       fetch-depth: 1
 ```
@@ -636,10 +632,10 @@ jobs:
   <foo>:
     steps:
       - ...
-      - uses: MrThearMan/CI/.github/actions/poetry@v0.5.1
+      - uses: MrThearMan/CI/.github/actions/poetry@v0.5.2
         with:
           os: "ubuntu-latest"
-          poetry-version: "2.0.0"
+          poetry-version: "2.3.2"
 ```
 
 However, `actions/setup-python` [poetry caching] cannot be used if poetry is not installed.
@@ -651,7 +647,7 @@ jobs:
     steps:
       - ...
       - name: "Load cached poetry environment"
-        uses: actions/cache@v4
+        uses: actions/cache@v5
         with:
           path: .venv
           key: <unique-key-per-env>
@@ -667,7 +663,7 @@ Can be used to check if certain filetypes were changed in a pull request.
 jobs:
   <foo>:
     steps:
-      - uses: MrThearMan/CI/.github/actions/get-changed-filetypes@v0.5.1
+      - uses: MrThearMan/CI/.github/actions/get-changed-filetypes@v0.5.2
         id: changed
         with:
           filetypes: "py|yaml"
