@@ -63,7 +63,7 @@ jobs:
 
     steps:
       - name: "Check out repository"
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
         with:
           submodules: ${{ inputs.submodules }}
           fetch-depth: ${{ inputs.fetch-depth }}
@@ -88,7 +88,7 @@ jobs:
         run: pip install coverage
 
       - name: "Load cached nox environment"
-        uses: actions/cache@v5
+        uses: actions/cache@v6
         id: nox-cache
         with:
           path: .nox
