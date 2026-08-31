@@ -31,6 +31,8 @@ mkdocs = "..."  # use latest version
 
 [tool.coverage.run]
 relative_files = true
+branch = true
+parallel = true
 
 [build-system]
 requires = ["poetry-core>=2.0.0"]
@@ -83,6 +85,7 @@ def tests(session: nox.Session) -> None:
     env = {"POETRY_VIRTUALENVS_PATH": str(Path(session.virtualenv.bin).parent)}
     session.run_install("poetry", "install", "--all-extras", "--all-groups", external=True, env=env)
     session.run("coverage", "run", "-m", "pytest", external="error")
+    session.run("coverage", "combine", "--append")
 ```
 
 This job can take a number of inputs via the [with]-keyword.
