@@ -1,4 +1,4 @@
-# Reusable CI pipelines for poetry projects
+# Reusable CI pipelines for uv projects
 
 > This is meant for personal use for my own projects.
 
@@ -8,8 +8,8 @@ There are 4 different pipeline templates, one for testing,
 one for building docs, one for releasing the library to [PyPI],
 and one for approving pull requests by certain authors automatically.
 
-All templates require the project to use [poetry].
-The testing pipeline requires [tox] and [coverage], as well as 
+All templates require the project to use [uv].
+The testing pipeline requires [nox] and [coverage].
 Coverage results are sent to [coveralls].
 The docs building pipeline requires [mkdocs].
 
@@ -20,22 +20,24 @@ Here is the required configuration for your `pyproject.toml`:
 ```toml
 # ...
 
-[tool.poetry.group.test.dependencies]
-pytest = "..."  # use latest version
-coverage = "..."  # use latest version
-nox = "..."  # use latest version
-
+[dependency-groups]
+test = [
+    "pytest==...",  # use latest version
+    "coverage==...",  # use latest version
+    "nox==...",  # use latest version
+]
 # This is only needed for the docs CI
-[tool.poetry.group.docs.dependencies]
-mkdocs = "..."  # use latest version
+docs = [
+    "mkdocs==...",  # use latest version
+]
 
 [tool.coverage.run]
 relative_files = true
 branch = true
 
 [build-system]
-requires = ["poetry-core>=2.0.0"]
-build-backend = "poetry.core.masonry.api"
+requires = ["uv_build>=0.12.5,<0.13.0"]
+build-backend = "uv_build"
 ```
 
 ---
@@ -60,13 +62,13 @@ on:
     paths:
       - "**.py"
       - "pyproject.toml"
-      - "poetry.lock"
+      - "uv.lock"
   pull_request:
   workflow_dispatch:
 
 jobs:
   test:
-    uses: MrThearMan/CI/.github/workflows/test-nox.yml@v0.5.2
+    uses: MrThearMan/CI/.github/workflows/test-nox.yml@v0.6.0
 ```
 
 Test pipelines use [nox](https://nox.thea.codes/en/stable/) to run the tests.
@@ -74,18 +76,21 @@ You'll need to add a `noxfile.py` to the root of your project with the following
 content:
 
 ```python
-from pathlib import Path
-
 import nox
 
 
-@nox.session(python=["3.10", "3.11", "3.12", "3.13"], reuse_venv=True)
+@nox.session(python=["3.11", "3.12", "3.13", "3.14"], reuse_venv=True)
 def tests(session: nox.Session) -> None:
-    env = {"POETRY_VIRTUALENVS_PATH": str(Path(session.virtualenv.bin).parent)}
-    session.run_install("poetry", "install", "--all-extras", "--all-groups", external=True, env=env)
+    env = {"UV_PROJECT_ENVIRONMENT": session.virtualenv.location}
+    session.run_install("uv", "sync", "--all-extras", "--all-groups", external=True, env=env)
     session.run("coverage", "run", "--parallel-mode", "-m", "pytest", external="error")
     session.run("coverage", "combine", "--append")
 ```
+
+> `uv sync` removes every package the lockfile does not name, and that includes `pip`.
+> A session that pins a dependency version on top of the sync must use
+> `session.run_install("uv", "pip", "install", "--python", session.virtualenv.location, ...)`
+> instead of `session.install(...)`.
 
 This job can take a number of inputs via the [with]-keyword.
 
@@ -93,16 +98,15 @@ This job can take a number of inputs via the [with]-keyword.
 
 #### `python-version`
 
-Configure the python versions the test will be run with.
-The tox [environments] used are configured with the
-`[gh-actions]` setting in `pyproject.toml`.
+Configure the python versions the tests will be run with.
+Each version becomes one nox session.
 
 Default configuration:
 
 ```yaml
 jobs:
   test:
-    uses: MrThearMan/CI/.github/workflows/test-nox.yml@v0.5.2
+    uses: MrThearMan/CI/.github/workflows/test-nox.yml@v0.6.0
     with:
       python-version: '["3.11", "3.12", "3.13", "3.14"]'
 ```
@@ -118,7 +122,7 @@ Default configuration:
 ```yaml
 jobs:
   test:
-    uses: MrThearMan/CI/.github/workflows/test-nox.yml@v0.5.2
+    uses: MrThearMan/CI/.github/workflows/test-nox.yml@v0.6.0
     with:
       os: '["ubuntu-latest", "macos-latest", "windows-latest"]'
 ```
@@ -134,25 +138,25 @@ Default configuration:
 ```yaml
 jobs:
   test:
-    uses: MrThearMan/CI/.github/workflows/test-nox.yml@v0.5.2
+    uses: MrThearMan/CI/.github/workflows/test-nox.yml@v0.6.0
     with:
       env: '{"FOO": "bar"}'
 ```
 
 ---
 
-#### `poetry-version`
+#### `uv-version`
 
-Configure the poetry version used in the pipeline.
+Configure the uv version used in the pipeline.
 
 Default configuration:
 
 ```yaml
 jobs:
   test:
-    uses: MrThearMan/CI/.github/workflows/test-nox.yml@v0.5.2
+    uses: MrThearMan/CI/.github/workflows/test-nox.yml@v0.6.0
     with:
-      poetry-version: "2.3.2"
+      uv-version: "0.12.10"
 ```
 
 ---
@@ -168,7 +172,7 @@ Default configuration:
 ```yaml
 jobs:
   test:
-    uses: MrThearMan/CI/.github/workflows/test-nox.yml@v0.5.2
+    uses: MrThearMan/CI/.github/workflows/test-nox.yml@v0.6.0
     with:
       exclude: '[{"os": "none", "python-version": "none"}]'  # this ignores nothing
 ```
@@ -184,7 +188,7 @@ Default configuration:
 ```yaml
 jobs:
   test:
-    uses: MrThearMan/CI/.github/workflows/test-nox.yml@v0.5.2
+    uses: MrThearMan/CI/.github/workflows/test-nox.yml@v0.6.0
     with:
       submodules: false
 ```
@@ -201,7 +205,7 @@ Default configuration:
 ```yaml
 jobs:
   test:
-    uses: MrThearMan/CI/.github/workflows/test-nox.yml@v0.5.2
+    uses: MrThearMan/CI/.github/workflows/test-nox.yml@v0.6.0
     with:
       fetch-depth: 1
 ```
@@ -218,7 +222,7 @@ Default configuration:
 ```yaml
 jobs:
   test:
-    uses: MrThearMan/CI/.github/workflows/test-nox.yml@v0.5.2
+    uses: MrThearMan/CI/.github/workflows/test-nox.yml@v0.6.0
     with:
       coveralls: true
 ```
@@ -235,7 +239,7 @@ Default configuration:
 ```yaml
 jobs:
   test:
-    uses: MrThearMan/CI/.github/workflows/test-nox.yml@v0.5.2
+    uses: MrThearMan/CI/.github/workflows/test-nox.yml@v0.6.0
     with:
       coveralls-os: "ubuntu-latest"
 ```
@@ -274,25 +278,25 @@ on:
 
 jobs:
   test:
-    uses: MrThearMan/CI/.github/workflows/docs.yml@v0.5.2
+    uses: MrThearMan/CI/.github/workflows/docs.yml@v0.6.0
 ```
 
 This job can take a number of inputs via the [with]-keyword.
 
 ---
 
-#### `poetry-version`
+#### `uv-version`
 
-Configure the poetry version used in the pipeline.
+Configure the uv version used in the pipeline.
 
 Default configuration:
 
 ```yaml
 jobs:
   test:
-    uses: MrThearMan/CI/.github/workflows/docs.yml@v0.5.2
+    uses: MrThearMan/CI/.github/workflows/docs.yml@v0.6.0
     with:
-      poetry-version: "2.3.2"
+      uv-version: "0.12.10"
 ```
 
 ---
@@ -306,7 +310,7 @@ Default configuration:
 ```yaml
 jobs:
   test:
-    uses: MrThearMan/CI/.github/workflows/docs.yml@v0.5.2
+    uses: MrThearMan/CI/.github/workflows/docs.yml@v0.6.0
     with:
       python-version: "3.14"
 ```
@@ -322,7 +326,7 @@ Default configuration:
 ```yaml
 jobs:
   test:
-    uses: MrThearMan/CI/.github/workflows/docs.yml@v0.5.2
+    uses: MrThearMan/CI/.github/workflows/docs.yml@v0.6.0
     with:
       os: "ubuntu-latest"
 ```
@@ -338,7 +342,7 @@ Default configuration:
 ```yaml
 jobs:
   test:
-    uses: MrThearMan/CI/.github/workflows/docs.yml@v0.5.2
+    uses: MrThearMan/CI/.github/workflows/docs.yml@v0.6.0
     with:
       env: '{"FOO": "bar"}'
 ```
@@ -354,7 +358,7 @@ Default configuration:
 ```yaml
 jobs:
   test:
-    uses: MrThearMan/CI/.github/workflows/test-nox.yml@v0.5.2
+    uses: MrThearMan/CI/.github/workflows/test-nox.yml@v0.6.0
     with:
       submodules: false
 ```
@@ -371,7 +375,7 @@ Default configuration:
 ```yaml
 jobs:
   test:
-    uses: MrThearMan/CI/.github/workflows/test-nox.yml@v0.5.2
+    uses: MrThearMan/CI/.github/workflows/test-nox.yml@v0.6.0
     with:
       fetch-depth: 1
 ```
@@ -381,9 +385,9 @@ jobs:
 ### PyPI release pipeline
 
 This pipeline can be used to build and release the library to [PyPI] with 
-poetry using a [PyPI token] stored in the repository's [actions secrets].
+uv using a [PyPI token] stored in the repository's [actions secrets].
 
-> Note that the poetry [version] configuration needs to be updated and match
+> Note that the `project.version` in `pyproject.toml` needs to be updated and match
 > the tag created for the release or this job will fail (can include v-prefix,
 > e.g., `v0.0.1`).
 
@@ -400,7 +404,7 @@ on:
 
 jobs:
   test:
-    uses: MrThearMan/CI/.github/workflows/release.yml@v0.5.2
+    uses: MrThearMan/CI/.github/workflows/release.yml@v0.6.0
     secrets:
       pypi-token: ${{ secrets.PYPI_API_TOKEN }}
 ```
@@ -411,18 +415,18 @@ This job can take a number of inputs via the [with]-keyword.
 
 ---
 
-#### `poetry-version`
+#### `uv-version`
 
-Configure the poetry version used in the pipeline.
+Configure the uv version used in the pipeline.
 
 Default configuration:
 
 ```yaml
 jobs:
   test:
-    uses: MrThearMan/CI/.github/workflows/release.yml@v0.5.2
+    uses: MrThearMan/CI/.github/workflows/release.yml@v0.6.0
     with:
-      poetry-version: "2.3.2"
+      uv-version: "0.12.10"
 ```
 
 ---
@@ -436,7 +440,7 @@ Default configuration:
 ```yaml
 jobs:
   test:
-    uses: MrThearMan/CI/.github/workflows/release.yml@v0.5.2
+    uses: MrThearMan/CI/.github/workflows/release.yml@v0.6.0
     with:
       python-version: "3.14"
 ```
@@ -452,7 +456,7 @@ Default configuration:
 ```yaml
 jobs:
   test:
-    uses: MrThearMan/CI/.github/workflows/release.yml@v0.5.2
+    uses: MrThearMan/CI/.github/workflows/release.yml@v0.6.0
     with:
       os: "ubuntu-latest"
 ```
@@ -468,7 +472,7 @@ Default configuration:
 ```yaml
 jobs:
   test:
-    uses: MrThearMan/CI/.github/workflows/release.yml@v0.5.2
+    uses: MrThearMan/CI/.github/workflows/release.yml@v0.6.0
     with:
       env: '{"FOO": "bar"}'
 ```
@@ -484,7 +488,7 @@ Default configuration:
 ```yaml
 jobs:
   test:
-    uses: MrThearMan/CI/.github/workflows/test-nox.yml@v0.5.2
+    uses: MrThearMan/CI/.github/workflows/test-nox.yml@v0.6.0
     with:
       submodules: false
 ```
@@ -501,7 +505,7 @@ Default configuration:
 ```yaml
 jobs:
   test:
-    uses: MrThearMan/CI/.github/workflows/test-nox.yml@v0.5.2
+    uses: MrThearMan/CI/.github/workflows/test-nox.yml@v0.6.0
     with:
       fetch-depth: 1
 ```
@@ -528,7 +532,7 @@ jobs:
     permissions:
       pull-requests: write
       contents: write
-    uses: MrThearMan/CI/.github/workflows/approve.yml@v0.5.2
+    uses: MrThearMan/CI/.github/workflows/approve.yml@v0.6.0
 ```
 
 This job can take a number of inputs via the [with]-keyword.
@@ -544,7 +548,7 @@ Default configuration:
 ```yaml
 jobs:
   approve:
-    uses: MrThearMan/CI/.github/workflows/approve.yml@v0.5.2
+    uses: MrThearMan/CI/.github/workflows/approve.yml@v0.6.0
     with:
       users: '["dependabot[bot]", "pre-commit-ci[bot]"]'
 ```
@@ -560,7 +564,7 @@ Default configuration:
 ```yaml
 jobs:
   test:
-    uses: MrThearMan/CI/.github/workflows/test-nox.yml@v0.5.2
+    uses: MrThearMan/CI/.github/workflows/test-nox.yml@v0.6.0
     with:
       submodules: false
 ```
@@ -577,7 +581,7 @@ Default configuration:
 ```yaml
 jobs:
   test:
-    uses: MrThearMan/CI/.github/workflows/test-nox.yml@v0.5.2
+    uses: MrThearMan/CI/.github/workflows/test-nox.yml@v0.6.0
     with:
       fetch-depth: 1
 ```
@@ -624,35 +628,20 @@ For the release pipeline, the hooks are:
 
 ## Extra actions
 
-### Poetry install action
+### uv install action
 
-Installs poetry to the current python version, e.g., if used after 
-`actions/setup-python`, poetry is installed with that python version.
-
-```yaml
-jobs:
-  <foo>:
-    steps:
-      - ...
-      - uses: MrThearMan/CI/.github/actions/poetry@v0.5.2
-        with:
-          os: "ubuntu-latest"
-          poetry-version: "2.3.2"
-```
-
-However, `actions/setup-python` [poetry caching] cannot be used if poetry is not installed.
-In this case, a custom cache must be created:
+uv is installed with [setup-uv], which also restores the download cache.
 
 ```yaml
 jobs:
   <foo>:
     steps:
       - ...
-      - name: "Load cached poetry environment"
-        uses: actions/cache@v5
+      - uses: astral-sh/setup-uv@v7
         with:
-          path: .venv
-          key: <unique-key-per-env>
+          version: "0.12.10"
+          python-version: "3.14"
+          enable-cache: true
 ```
 
 ### Git changed filetypes
@@ -665,7 +654,7 @@ Can be used to check if certain filetypes were changed in a pull request.
 jobs:
   <foo>:
     steps:
-      - uses: MrThearMan/CI/.github/actions/get-changed-filetypes@v0.5.2
+      - uses: MrThearMan/CI/.github/actions/get-changed-filetypes@v0.6.0
         id: changed
         with:
           filetypes: "py|yaml"
@@ -673,23 +662,21 @@ jobs:
 ```
 
 
-[poetry]: https://python-poetry.org/
-[tox]: https://tox.wiki/en/latest/
+[uv]: https://docs.astral.sh/uv/
+[nox]: https://nox.thea.codes/en/stable/
+[setup-uv]: https://github.com/astral-sh/setup-uv
 [coverage]: https://coverage.readthedocs.io/en/latest/
 [coveralls]: https://docs.coveralls.io/
 [coveralls-python]: https://github.com/TheKevJames/coveralls-python
 [mkdocs]: https://www.mkdocs.org/
 [PyPI]: https://pypi.org/
 [with]: https://docs.github.com/en/actions/using-workflows/workflow-syntax-for-github-actions#jobsjob_idstepswith
-[environments]: https://tox.wiki/en/latest/config.html#envlist
 [parallel builds webhook]: https://docs.coveralls.io/parallel-build-webhook
 [job stategy matrix]: https://docs.github.com/en/actions/using-jobs/using-a-matrix-for-your-jobs
 [yaml flow style]: https://yaml.org/spec/1.2.2/#chapter-7-flow-style-productions
 [GitHub pages]: https://pages.github.com/
 [pypi token]: https://pypi.org/help/#apitoken
 [actions secrets]: https://docs.github.com/en/actions/security-guides/encrypted-secrets#creating-encrypted-secrets-for-a-repository
-[version]: https://python-poetry.org/docs/pyproject#version
 [composite action]: https://docs.github.com/en/actions/creating-actions/creating-a-composite-action
-[poetry caching]: https://github.com/actions/setup-python/blob/main/docs/advanced-usage.md#caching-packages
 [dependabot]: https://github.com/dependabot
 [pre-commit.ci]: https://github.com/apps/pre-commit-ci

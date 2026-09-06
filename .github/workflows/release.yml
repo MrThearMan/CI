@@ -7,10 +7,10 @@ on:
         required: false
         type: string
         default: "3.14"
-      poetry-version:
+      uv-version:
         required: false
         type: string
-        default: "2.3.2"
+        default: "0.12.10"
       os:
         required: false
         type: string
@@ -47,41 +47,30 @@ jobs:
           submodules: ${{ inputs.submodules }}
           fetch-depth: ${{ inputs.fetch-depth }}
 
-      - name: "Set up python"
-        id: setup-python
-        uses: actions/setup-python@v6
+      - name: "Set up uv"
+        uses: astral-sh/setup-uv@v7
         with:
+          version: ${{ inputs.uv-version }}
           python-version: ${{ inputs.python-version }}
-
-      - uses: MrThearMan/CI/.github/actions/poetry@v0.5.2
-        with:
-          os: ${{ inputs.os }}
-          poetry-version: ${{ inputs.poetry-version }}
-          python-version: ${{ steps.setup-python.outputs.python-version }}
-
-      - name: "Load cached poetry environment"
-        uses: actions/cache@v5
-        with:
-          path: .venv
-          key: cache-v1-release-python${{ steps.setup-python.outputs.python-version }}-${{ inputs.os }}
+          enable-cache: true
 
       - name: "Pre-release hook"
         if: ${{ hashFiles('.github/actions/pre-release/action.yml') != '' }}
         uses: ./.github/actions/pre-release
 
-      - name: "Install dependencies"
-        run: poetry install
-
       - name: "Test that project version matches release version"
         run: |
-          echo "Project version: '$(poetry version -s | tr -d '\n' | tr -d '\r\n')'"
+          echo "Project version: '$(uv version --short)'"
           echo "Release version: '$(echo ${{ github.event.release.tag_name }} | tr -d 'v')'"
-          test $(poetry version -s | tr -d '\n' | tr -d '\r\n') == $(echo ${{ github.event.release.tag_name }} | tr -d 'v')
+          test $(uv version --short) == $(echo ${{ github.event.release.tag_name }} | tr -d 'v')
+
+      - name: "Build distributions"
+        run: uv build
 
       - name: "Publish on PyPi"
-        run: poetry publish --build
+        run: uv publish
         env:
-          POETRY_PYPI_TOKEN_PYPI: ${{ secrets.pypi-token }}
+          UV_PUBLISH_TOKEN: ${{ secrets.pypi-token }}
 
       - name: "Post-release hook"
         if: ${{ hashFiles('.github/actions/post-release/action.yml') != '' }}

@@ -15,10 +15,10 @@ on:
         required: false
         type: string
         default: '{}'
-      poetry-version:
+      uv-version:
         required: false
         type: string
-        default: "2.3.2"
+        default: "0.12.10"
       exclude:
         required: false
         type: string
@@ -68,44 +68,39 @@ jobs:
           submodules: ${{ inputs.submodules }}
           fetch-depth: ${{ inputs.fetch-depth }}
 
+      # nox discovers interpreters on PATH, so the matrix version is installed here
+      # rather than left to uv.
       - name: "Set up python"
         id: setup-python
         uses: actions/setup-python@v6
         with:
           python-version: ${{ matrix.python-version }}
 
-      - uses: MrThearMan/CI/.github/actions/poetry@v0.5.2
+      - name: "Set up uv"
+        uses: astral-sh/setup-uv@v7
         with:
-          os: ${{ matrix.os }}
-          poetry-version: ${{ inputs.poetry-version }}
-          python-version: ${{ steps.setup-python.outputs.python-version }}
-
-      - name: "Install nox"
-        run: pip install nox
-
-      - name: "Install coverage"
-        if: ${{ inputs.coveralls && inputs.coveralls-os == matrix.os }}
-        run: pip install coverage
+          version: ${{ inputs.uv-version }}
+          enable-cache: true
 
       - name: "Load cached nox environment"
         uses: actions/cache@v5
         id: nox-cache
         with:
           path: .nox
-          key: cache-v1-nox-python${{ steps.setup-python.outputs.python-version }}-${{ matrix.os }}-${{ hashFiles('**/poetry.lock') }}
+          key: cache-v1-nox-python${{ steps.setup-python.outputs.python-version }}-${{ matrix.os }}-${{ hashFiles('**/uv.lock') }}
 
       - name: "Pre-test hook"
         if: ${{ hashFiles('.github/actions/pre-test/action.yml') != '' }}
         uses: ./.github/actions/pre-test
 
       - name: "Run tests with nox"
-        run: nox --session tests --python ${{ matrix.python-version }}
+        run: uvx nox --session tests --python ${{ matrix.python-version }}
 
       - name: "Make coverage report"
         if: ${{ inputs.coveralls && inputs.coveralls-os == matrix.os }}
         run: |
-          coverage report
-          coverage xml
+          uvx coverage report
+          uvx coverage xml
 
       - name: "Post-test hook"
         if: ${{ hashFiles('.github/actions/post-test/action.yml') != '' }}
