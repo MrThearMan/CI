@@ -81,11 +81,17 @@ import nox
 
 @nox.session(python=["3.11", "3.12", "3.13", "3.14"], reuse_venv=True)
 def tests(session: nox.Session) -> None:
-    env = {"UV_PROJECT_ENVIRONMENT": session.virtualenv.location}
-    session.run_install("uv", "sync", "--all-extras", "--all-groups", external=True, env=env)
+    venv = session.virtualenv.location
+    env = {"UV_PROJECT_ENVIRONMENT": venv}
+    session.run_install("uv", "sync", "--all-extras", "--all-groups", "--python", venv, external=True, env=env)
     session.run("coverage", "run", "--parallel-mode", "-m", "pytest", external="error")
     session.run("coverage", "combine", "--append")
 ```
+
+> `UV_PROJECT_ENVIRONMENT` tells `uv sync` where the environment goes, not which interpreter
+> fills it. Without `--python`, `uv sync` picks its own interpreter, and a `.python-version`
+> file makes it the first entry there. It then replaces the virtualenv nox just made, so every
+> session runs on the same Python and the matrix tests one version four times.
 
 > `uv sync` removes every package the lockfile does not name, and that includes `pip`.
 > A session that pins a dependency version on top of the sync must use
