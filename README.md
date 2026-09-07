@@ -68,7 +68,7 @@ on:
 
 jobs:
   test:
-    uses: MrThearMan/CI/.github/workflows/test-nox.yml@v0.6.0
+    uses: MrThearMan/CI/.github/workflows/test-nox.yml@v0.6.1
 ```
 
 Test pipelines use [nox](https://nox.thea.codes/en/stable/) to run the tests.
@@ -112,7 +112,7 @@ Default configuration:
 ```yaml
 jobs:
   test:
-    uses: MrThearMan/CI/.github/workflows/test-nox.yml@v0.6.0
+    uses: MrThearMan/CI/.github/workflows/test-nox.yml@v0.6.1
     with:
       python-version: '["3.11", "3.12", "3.13", "3.14"]'
 ```
@@ -128,7 +128,7 @@ Default configuration:
 ```yaml
 jobs:
   test:
-    uses: MrThearMan/CI/.github/workflows/test-nox.yml@v0.6.0
+    uses: MrThearMan/CI/.github/workflows/test-nox.yml@v0.6.1
     with:
       os: '["ubuntu-latest", "macos-latest", "windows-latest"]'
 ```
@@ -144,7 +144,7 @@ Default configuration:
 ```yaml
 jobs:
   test:
-    uses: MrThearMan/CI/.github/workflows/test-nox.yml@v0.6.0
+    uses: MrThearMan/CI/.github/workflows/test-nox.yml@v0.6.1
     with:
       env: '{"FOO": "bar"}'
 ```
@@ -160,7 +160,7 @@ Default configuration:
 ```yaml
 jobs:
   test:
-    uses: MrThearMan/CI/.github/workflows/test-nox.yml@v0.6.0
+    uses: MrThearMan/CI/.github/workflows/test-nox.yml@v0.6.1
     with:
       uv-version: "0.12.10"
 ```
@@ -178,7 +178,7 @@ Default configuration:
 ```yaml
 jobs:
   test:
-    uses: MrThearMan/CI/.github/workflows/test-nox.yml@v0.6.0
+    uses: MrThearMan/CI/.github/workflows/test-nox.yml@v0.6.1
     with:
       exclude: '[{"os": "none", "python-version": "none"}]'  # this ignores nothing
 ```
@@ -194,7 +194,7 @@ Default configuration:
 ```yaml
 jobs:
   test:
-    uses: MrThearMan/CI/.github/workflows/test-nox.yml@v0.6.0
+    uses: MrThearMan/CI/.github/workflows/test-nox.yml@v0.6.1
     with:
       submodules: false
 ```
@@ -211,7 +211,7 @@ Default configuration:
 ```yaml
 jobs:
   test:
-    uses: MrThearMan/CI/.github/workflows/test-nox.yml@v0.6.0
+    uses: MrThearMan/CI/.github/workflows/test-nox.yml@v0.6.1
     with:
       fetch-depth: 1
 ```
@@ -228,7 +228,7 @@ Default configuration:
 ```yaml
 jobs:
   test:
-    uses: MrThearMan/CI/.github/workflows/test-nox.yml@v0.6.0
+    uses: MrThearMan/CI/.github/workflows/test-nox.yml@v0.6.1
     with:
       coveralls: true
 ```
@@ -245,9 +245,25 @@ Default configuration:
 ```yaml
 jobs:
   test:
-    uses: MrThearMan/CI/.github/workflows/test-nox.yml@v0.6.0
+    uses: MrThearMan/CI/.github/workflows/test-nox.yml@v0.6.1
     with:
       coveralls-os: "ubuntu-latest"
+```
+
+---
+
+#### `uv-cache-suffix`
+
+Set a cache suffix for the uv installation.
+
+Default configuration:
+
+```yaml
+jobs:
+  test:
+    uses: MrThearMan/CI/.github/workflows/test-nox.yml@v0.6.1
+    with:
+      uv-cache-suffix: ""
 ```
 
 ---
@@ -284,7 +300,7 @@ on:
 
 jobs:
   test:
-    uses: MrThearMan/CI/.github/workflows/docs.yml@v0.6.0
+    uses: MrThearMan/CI/.github/workflows/docs.yml@v0.6.1
 ```
 
 This job can take a number of inputs via the [with]-keyword.
@@ -300,7 +316,7 @@ Default configuration:
 ```yaml
 jobs:
   test:
-    uses: MrThearMan/CI/.github/workflows/docs.yml@v0.6.0
+    uses: MrThearMan/CI/.github/workflows/docs.yml@v0.6.1
     with:
       uv-version: "0.12.10"
 ```
@@ -316,7 +332,7 @@ Default configuration:
 ```yaml
 jobs:
   test:
-    uses: MrThearMan/CI/.github/workflows/docs.yml@v0.6.0
+    uses: MrThearMan/CI/.github/workflows/docs.yml@v0.6.1
     with:
       python-version: "3.14"
 ```
@@ -332,7 +348,7 @@ Default configuration:
 ```yaml
 jobs:
   test:
-    uses: MrThearMan/CI/.github/workflows/docs.yml@v0.6.0
+    uses: MrThearMan/CI/.github/workflows/docs.yml@v0.6.1
     with:
       os: "ubuntu-latest"
 ```
@@ -348,7 +364,7 @@ Default configuration:
 ```yaml
 jobs:
   test:
-    uses: MrThearMan/CI/.github/workflows/docs.yml@v0.6.0
+    uses: MrThearMan/CI/.github/workflows/docs.yml@v0.6.1
     with:
       env: '{"FOO": "bar"}'
 ```
@@ -364,7 +380,7 @@ Default configuration:
 ```yaml
 jobs:
   test:
-    uses: MrThearMan/CI/.github/workflows/test-nox.yml@v0.6.0
+    uses: MrThearMan/CI/.github/workflows/test-nox.yml@v0.6.1
     with:
       submodules: false
 ```
@@ -381,9 +397,25 @@ Default configuration:
 ```yaml
 jobs:
   test:
-    uses: MrThearMan/CI/.github/workflows/test-nox.yml@v0.6.0
+    uses: MrThearMan/CI/.github/workflows/test-nox.yml@v0.6.1
     with:
       fetch-depth: 1
+```
+
+---
+
+#### `uv-cache-suffix`
+
+Set a cache suffix for the uv installation.
+
+Default configuration:
+
+```yaml
+jobs:
+  test:
+    uses: MrThearMan/CI/.github/workflows/test-nox.yml@v0.6.1
+    with:
+      uv-cache-suffix: ""
 ```
 
 ---
@@ -410,7 +442,7 @@ on:
 
 jobs:
   test:
-    uses: MrThearMan/CI/.github/workflows/release.yml@v0.6.0
+    uses: MrThearMan/CI/.github/workflows/release.yml@v0.6.1
     secrets:
       pypi-token: ${{ secrets.PYPI_API_TOKEN }}
 ```
@@ -430,7 +462,7 @@ Default configuration:
 ```yaml
 jobs:
   test:
-    uses: MrThearMan/CI/.github/workflows/release.yml@v0.6.0
+    uses: MrThearMan/CI/.github/workflows/release.yml@v0.6.1
     with:
       uv-version: "0.12.10"
 ```
@@ -446,7 +478,7 @@ Default configuration:
 ```yaml
 jobs:
   test:
-    uses: MrThearMan/CI/.github/workflows/release.yml@v0.6.0
+    uses: MrThearMan/CI/.github/workflows/release.yml@v0.6.1
     with:
       python-version: "3.14"
 ```
@@ -462,7 +494,7 @@ Default configuration:
 ```yaml
 jobs:
   test:
-    uses: MrThearMan/CI/.github/workflows/release.yml@v0.6.0
+    uses: MrThearMan/CI/.github/workflows/release.yml@v0.6.1
     with:
       os: "ubuntu-latest"
 ```
@@ -478,7 +510,7 @@ Default configuration:
 ```yaml
 jobs:
   test:
-    uses: MrThearMan/CI/.github/workflows/release.yml@v0.6.0
+    uses: MrThearMan/CI/.github/workflows/release.yml@v0.6.1
     with:
       env: '{"FOO": "bar"}'
 ```
@@ -494,7 +526,7 @@ Default configuration:
 ```yaml
 jobs:
   test:
-    uses: MrThearMan/CI/.github/workflows/test-nox.yml@v0.6.0
+    uses: MrThearMan/CI/.github/workflows/test-nox.yml@v0.6.1
     with:
       submodules: false
 ```
@@ -511,7 +543,7 @@ Default configuration:
 ```yaml
 jobs:
   test:
-    uses: MrThearMan/CI/.github/workflows/test-nox.yml@v0.6.0
+    uses: MrThearMan/CI/.github/workflows/test-nox.yml@v0.6.1
     with:
       fetch-depth: 1
 ```
@@ -538,7 +570,7 @@ jobs:
     permissions:
       pull-requests: write
       contents: write
-    uses: MrThearMan/CI/.github/workflows/approve.yml@v0.6.0
+    uses: MrThearMan/CI/.github/workflows/approve.yml@v0.6.1
 ```
 
 This job can take a number of inputs via the [with]-keyword.
@@ -554,7 +586,7 @@ Default configuration:
 ```yaml
 jobs:
   approve:
-    uses: MrThearMan/CI/.github/workflows/approve.yml@v0.6.0
+    uses: MrThearMan/CI/.github/workflows/approve.yml@v0.6.1
     with:
       users: '["dependabot[bot]", "pre-commit-ci[bot]"]'
 ```
@@ -570,7 +602,7 @@ Default configuration:
 ```yaml
 jobs:
   test:
-    uses: MrThearMan/CI/.github/workflows/test-nox.yml@v0.6.0
+    uses: MrThearMan/CI/.github/workflows/test-nox.yml@v0.6.1
     with:
       submodules: false
 ```
@@ -587,9 +619,25 @@ Default configuration:
 ```yaml
 jobs:
   test:
-    uses: MrThearMan/CI/.github/workflows/test-nox.yml@v0.6.0
+    uses: MrThearMan/CI/.github/workflows/test-nox.yml@v0.6.1
     with:
       fetch-depth: 1
+```
+
+---
+
+#### `uv-cache-suffix`
+
+Set a cache suffix for the uv installation.
+
+Default configuration:
+
+```yaml
+jobs:
+  test:
+    uses: MrThearMan/CI/.github/workflows/test-nox.yml@v0.6.1
+    with:
+      uv-cache-suffix: ""
 ```
 
 ---
@@ -660,7 +708,7 @@ Can be used to check if certain filetypes were changed in a pull request.
 jobs:
   <foo>:
     steps:
-      - uses: MrThearMan/CI/.github/actions/get-changed-filetypes@v0.6.0
+      - uses: MrThearMan/CI/.github/actions/get-changed-filetypes@v0.6.1
         id: changed
         with:
           filetypes: "py|yaml"

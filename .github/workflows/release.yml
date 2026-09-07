@@ -27,6 +27,10 @@ on:
         required: false
         type: number
         default: 1
+      uv-cache-suffix:
+        required: false
+        type: string
+        default: ""
     secrets:
       pypi-token:
         required: true
@@ -53,6 +57,7 @@ jobs:
           version: ${{ inputs.uv-version }}
           python-version: ${{ inputs.python-version }}
           enable-cache: true
+          cache-suffix: ${{ inputs.uv-cache-suffix }}
 
       - name: "Pre-release hook"
         if: ${{ hashFiles('.github/actions/pre-release/action.yml') != '' }}
