@@ -72,8 +72,6 @@ jobs:
           submodules: ${{ inputs.submodules }}
           fetch-depth: ${{ inputs.fetch-depth }}
 
-      # nox discovers interpreters on PATH, so the matrix version is installed here
-      # rather than left to uv.
       - name: "Set up python"
         id: setup-python
         uses: actions/setup-python@v6
@@ -84,6 +82,7 @@ jobs:
         uses: astral-sh/setup-uv@v7
         with:
           version: ${{ inputs.uv-version }}
+          python-version: ${{ matrix.python-version }}
           enable-cache: true
           cache-suffix: ${{ inputs.uv-cache-suffix }}
 
