@@ -43,6 +43,10 @@ on:
         required: false
         type: string
         default: ""
+      allow-prereleases:
+        required: false
+        type: boolean
+        default: false
 
 jobs:
   test:
@@ -77,6 +81,7 @@ jobs:
         uses: actions/setup-python@v7
         with:
           python-version: ${{ matrix.python-version }}
+          allow-prereleases: ${{ inputs.allow-prereleases }}
 
       - name: "Set up uv"
         uses: astral-sh/setup-uv@v7
